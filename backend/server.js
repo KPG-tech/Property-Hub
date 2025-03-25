@@ -11,7 +11,21 @@ const dotenv = require("dotenv");
 app.use(cors()); //declare karapuwa use karanawa
 app.use(bodyParser.json());
 
+const uri = 'mongodb+srv://it22638854:HMRad123#@cluster0.mfucu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+
 const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+
+const connect = async( ) =>{
+  try{ /* empty */ 
+  }
+  catch{
+
+  }
+
+
+}
+
 
 mongoose.connect(URL, {
   //connect mongodb
