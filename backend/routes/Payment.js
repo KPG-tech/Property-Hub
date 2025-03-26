@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Payment = require("../models/Payment");
+const { processPayment } = require("../controllers/PaymentController");
+
+
+router.post("/pay", processPayment);
 
 // 🔹 **POST**: Create a new payment
 router.post("/", async (req, res) => {

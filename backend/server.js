@@ -8,7 +8,7 @@ const dotenv = require("dotenv");
 
 const app = express();
 const path = require("path");
-const PORT = process.env.PORT || 3000; // 8070 OR 8070 eka nattan wena available ekak
+const PORT = process.env.PORT || 5000; // 8070 OR 8070 eka nattan wena available ekak
 
 dotenv.config(); // Load environment variables
 
@@ -16,7 +16,7 @@ app.use(cors()); // declare karapuwa use karanawa
 app.use(bodyParser.json());
 
 // MongoDB URI
-const uri = 'mongodb+srv://it22638854:HMRad123#@cluster0.mfucu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri = 'mongodb+srv://it22638854:Radeesa@cluster0.mfucu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // MongoDB Connection Function
@@ -34,12 +34,7 @@ const connect = async () => {
 connect(); // Call the connect function to establish the connection
 
 // Alternatively, you were trying to connect using mongoose directly
-mongoose.connect(URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  // useCreateIndex: true, // deprecated option in mongoose 6
-  // useFindAndModify: false, // deprecated option
-});
+
 
 const connection = mongoose.connection; // hadagatta connection eka open karagannawa
 connection.once("open", () => {
