@@ -1,0 +1,189 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  transition: 0.3s ease-in-out;
+}
+
+.auth_continer {
+  background-color: #c6e6f3;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+}
+.auth_continer_reg {
+  background-color: #c6e6f3;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 150px 0;
+  align-items: center;
+}
+.auth_card {
+  background-color: white;
+  border-radius: 15px;
+  width: 850px;
+  padding: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.auth_card_lft_img {
+  background-image: url("./img/loginbk.png");
+  flex: 1;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  height: 450px;
+}
+.auth_reg_card_lft_img {
+  background-image: url("./img/regbk.png");
+  flex: 1;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  height: 600px;
+}
+input:focus {
+  outline: none;
+}
+.auth_card_right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  flex-direction: column;
+  padding: 15px;
+}
+.auth_card_topic {
+  width: 100%;
+  text-transform: uppercase;
+  color: #113648;
+  font-weight: 600;
+  border-left: 3px solid #113648;
+  padding-left: 15px;
+  font-size: 40px;
+  line-height: 35px;
+}
+.auth_card_from {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-direction: column;
+}
+.auth_card_from_reg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-direction: column;
+}
+.auth_card_from_input {
+  width: 100%;
+}
+.auth_card_lable {
+  width: 100%;
+  text-transform: uppercase;
+  color: #113648;
+  font-weight: 500;
+  font-size: 17px;
+}
+.auth_card_input {
+  width: 100%;
+  margin: 5px 0 10px 0;
+  border: 1px solid #113648;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+.auth_btn {
+  background-color: #c6e6f3;
+  border: 2px solid #c6e6f3;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 17px;
+  color: #113648;
+  padding: 3px 20px;
+  border-radius: 3px;
+}
+
+.no_accc {
+  color: #113648;
+  text-transform: capitalize;
+  font-size: 15px;
+  text-align: end;
+  width: 100%;
+}
+.no_accc_btn {
+  font-weight: 500;
+  cursor: pointer;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth_card {
+  animation: fadeUp 0.6s ease-in-out;
+}
+.seler_alert_box {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.done_alert_box_seller {
+  width: 500px;
+  background-color: green;
+  color: white;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 3px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 5px 20px;
+}
+
+.alert_name_seller {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.alert_icon_seller {
+  font-size: 20px;
+}
+.no_alert_box_seller{
+  width: 600px;
+  background-color: rgb(198, 0, 0);
+  color: white;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 3px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 5px 20px;
+}
