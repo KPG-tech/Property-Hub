@@ -17,14 +17,17 @@ const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.ne
 
 
 const connect = async( ) =>{
-  try{ /* empty */ 
+  try{ 
+    await mongoose.connect(uri); 
+    console.log('Connected to MongoDB');
   }
-  catch{
-
+  catch(error){
+    console.log('MongoDB Error: ',error);
   }
+  
 
 
-}
+};
 
 
 mongoose.connect(URL, {
