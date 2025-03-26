@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // ✅ Add React import
+import React, { useState } from "react";
 import "./Payment.css";
 
 function Payment() {
@@ -20,7 +20,7 @@ function Payment() {
     const currentMonth = new Date().getMonth() + 1;
 
     if (!month || !year || month < 1 || month > 12 || year.length !== 2) return false;
-    
+
     const expiryYear = parseInt(year, 10);
     const expiryMonth = parseInt(month, 10);
 
@@ -33,7 +33,7 @@ function Payment() {
   };
 
   // Handle Payment Submission
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!cardNumber || !expiry || !cvv || !amount) {
       setMessage("⚠️ Please fill in all fields.");
       return;
@@ -54,7 +54,29 @@ function Payment() {
       return;
     }
 
-    setMessage("✅ Payment Successful!");
+    const paymentAmount = parseFloat(amount);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/payment/pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: "user123", // Replace with actual user ID
+          amount: paymentAmount,
+          token: "tok_visa" // Replace with real token in production
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage("✅ Payment Successful!");
+      } else {
+        setMessage("❌ Payment Failed: " + data.error);
+      }
+    } catch (error) {
+      setMessage("❌ Payment Error: " + error.message);
+    }
   };
 
   // Card Number Input Formatting (XXXX XXXX XXXX XXXX)
