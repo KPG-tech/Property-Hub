@@ -22,7 +22,6 @@ const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.ne
 // MongoDB Connection Function
 const connect = async () => {
   try {
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('Connected to MongoDB');
   }
   catch (error) {
