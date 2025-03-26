@@ -11,7 +11,7 @@ const dotenv = require("dotenv");
 app.use(cors()); //declare karapuwa use karanawa
 app.use(bodyParser.json());
 
-const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const URL = "mongodb+srv://dineth550:20021213@studentms.q45in7h.mongodb.net/property";
 
 mongoose.connect(URL, {
   //connect mongodb
@@ -28,9 +28,11 @@ connection.once("open", () => {
 
 const authRouter = require("./routes/authRoutes.js");
 const pricepredictRouter = require("./routes/pricepredictRoutes.js");
+const bookingRouter = require("./routes/propertyRoutes.js");
 
 app.use("/auth", authRouter);
 app.use("/propertyfuture",pricepredictRouter);
+app.use("/propertyBooking",bookingRouter);
 
 
 app.listen(PORT, () => {

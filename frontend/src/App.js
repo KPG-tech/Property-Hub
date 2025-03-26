@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+// import React, { useState } from 'react';
+// import PropertyList from './component/PropertyList';
+// import BookingForm from './component/BookingForm';
+// import UserBookings from './component/UserBookings';
+
+// function App() {
+//   const [selectedProperty, setSelectedProperty] = useState(null);
+//   const [userId] = useState('67e4161d34de40d36aeeea4b'); // Replace with actual user ID from auth
+
+//   return (
+//     <div className="App">
+//       <h1>Property Viewing Booker</h1>
+//       {!selectedProperty ? (
+//         <PropertyList onSelectProperty={setSelectedProperty} />
+//       ) : (
+//         <BookingForm propertyId={selectedProperty} />
+//       )}
+//       <UserBookings userId={userId} />
+//     </div>
+//   );
+// }
+
+// export default App;
+
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './component/Home';
+import UserBookings from './component/UserBookings';
 
 function App() {
+  const userId = '67e4161d34de40d36aeeea4b'; // Replace with actual user ID from auth
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="min-h-screen bg-gray-100">
+        <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 shadow-lg">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 className="text-white text-2xl font-bold">Property Booker</h1>
+            <div className="space-x-4">
+              <a href="/" className="text-white hover:text-blue-200 transition">Home</a>
+              <a href="/my-bookings" className="text-white hover:text-blue-200 transition">My Bookings</a>
+            </div>
+          </div>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/my-bookings" element={<UserBookings userId={userId} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
