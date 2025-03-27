@@ -1,13 +1,26 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); // Load Stripe Secret Key from .env
+require("dotenv").config(); // Load environment variables
+const express = require("express");
+const cors = require("cors");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); // Load Stripe Secret Key
+
+const app = express();
+
+// Middleware
+app.use(express.json()); // Parses incoming JSON requests
+app.use(cors()); // Allows cross-origin requests
 
 // Payment Handler
 const processPayment = async (req, res) => {
   try {
-    const { amount, currency, token } = req.body;
+    const { amount, currency = "usd", token } = req.body;
+
+    if (!amount || !token) {
+      return res.status(400).json({ success: false, message: "Missing required fields." });
+    }
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, // Convert amount to cents
-      currency: currency || "usd",
+      currency,
       payment_method_types: ["card"],
       description: "Property Hub Payment",
       payment_method: token,
@@ -20,37 +33,15 @@ const processPayment = async (req, res) => {
       paymentIntent,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Payment Failed", error });
-  }
-};
-const handlePayment = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/api/payment/pay", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: "user123",
-        amount: parseFloat(amount),
-        token: "tok_visa",
-      }),
-    });
-
-    const text = await response.text(); // Read response as text
-    console.log("Raw Response:", text); // Log full response
-
-    // Try parsing JSON
-    const data = JSON.parse(text);
-    
-    if (data.success) {
-      setMessage("✅ Payment Successful!");
-    } else {
-      setMessage("❌ Payment Failed: " + data.error);
-    }
-  } catch (error) {
-    setMessage("❌ Payment Error: " + error.message);
+    console.error("Payment Error:", error);
+    res.status(500).json({ success: false, message: "Payment Failed", error: error.message });
   }
 };
 
+// API Routes
+app.post("/api/payment/pay", processPayment);
+
+// Handle 404 Errors
 app.use((req, res, next) => {
   res.status(404).json({ success: false, error: "API endpoint not found" });
 });
@@ -61,56 +52,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, error: "Internal Server Error" });
 });
 
-
-const handlePayment = async () => {
-  if (!cardNumber || !expiry || !cvv || !amount) {
-    setMessage("⚠️ Please fill in all fields.");
-    return;
-  }
-
-  if (!validateCardNumber(cardNumber)) {
-    setMessage("❌ Invalid card number. Enter 16 digits in XXXX XXXX XXXX XXXX format.");
-    return;
-  }
-
-  if (!validateExpiry(expiry)) {
-    setMessage("❌ Invalid expiry date. Use MM/YY format and ensure it's in the future.");
-    return;
-  }
-
-  if (!validateCvv(cvv)) {
-    setMessage("❌ CVV should be a 3-digit number.");
-    return;
-  }
-
-  const paymentAmount = parseFloat(amount);
-
-  try {
-    const response = await fetch("http://localhost:3000/api/payment/pay", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: "user123", // Replace with actual user ID
-        amount: paymentAmount,
-        token: "tok_visa", // Replace with real token in production
-      }),
-    });
-
-    // Debugging: Read response as text and log it
-    const text = await response.text();
-    console.log("Raw Response:", text); // Log full response
-
-    // Try parsing JSON response
-    const data = JSON.parse(text);
-
-    if (data.success) {
-      setMessage("✅ Payment Successful!");
-    } else {
-      setMessage("❌ Payment Failed: " + data.error);
-    }
-  } catch (error) {
-    setMessage("❌ Payment Error: " + error.message);
-  }
-};
+// Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { processPayment };
