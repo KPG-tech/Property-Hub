@@ -62,8 +62,11 @@ function Payment() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: "user123", // Replace with actual user ID
+          cardNumber: cardNumber.replace(/\s/g, ""), // Send without spaces
+          expiry,
+          cvv,
           amount: paymentAmount,
-          token: "tok_visa" // Replace with real token in production
+          token: "tok_visa", // Replace with real token in production
         }),
       });
 
