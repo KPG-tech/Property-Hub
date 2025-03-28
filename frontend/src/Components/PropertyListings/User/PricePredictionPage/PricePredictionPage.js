@@ -66,7 +66,7 @@ function PricePredictionPage() {
                         </div>
                         <div className="details-list">
                             {[
-                                { icon: FaMoneyBillWave, label: 'Initial Price', value: `$${predictionData.predictions[0].estimatedValue.toLocaleString()}`, color: 'text-green-600' },
+                                { icon: FaMoneyBillWave, label: 'Initial Price', value: `LKR${predictionData.predictions[0].estimatedValue.toLocaleString()}`, color: 'text-green-600' },
                                 { icon: FaCalendar, label: 'Prediction Date', value: '2025-02-15', color: 'text-purple-600' },
                                 { icon: FaMapMarkerAlt, label: 'Location', value: 'Homagama', color: 'text-red-600' },
                                 { icon: FaBuilding, label: 'Property Type', value: 'Land', color: 'text-indigo-600' },
@@ -102,7 +102,7 @@ function PricePredictionPage() {
                                     {predictionData.predictions.map((prediction, index) => (
                                         <tr key={index} className={`table-row ${getValueColor(index)}`}>
                                             <td className="table-cell font-semibold">{prediction.year}</td>
-                                            <td className="table-cell font-bold">${prediction.estimatedValue.toLocaleString()}</td>
+                                            <td className="table-cell font-bold">LKR{prediction.estimatedValue.toLocaleString()}</td>
                                             <td className="table-cell">
                                                 <div className="confidence-bar-bg">
                                                     <div className="confidence-bar" style={{ width: `${prediction.confidenceScore}%` }}></div>
