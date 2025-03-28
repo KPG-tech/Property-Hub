@@ -75,10 +75,10 @@ function Payment() {
       if (data.success) {
         setMessage("✅ Payment Successful!");
       } else {
-        setMessage("❌ Payment Failed: " + data.error);
+        setMessage("❌ Payment Failed " );
       }
     } catch (error) {
-      setMessage("❌ Payment Error: " + error.message);
+      setMessage("❌ Payment Error " );
     }
   };
 
@@ -148,7 +148,7 @@ function Payment() {
         <input
           id="amount"
           type="text"
-          placeholder="$100.00"
+          placeholder="100.00"
           value={amount}
           onChange={handleAmountChange}
         />
