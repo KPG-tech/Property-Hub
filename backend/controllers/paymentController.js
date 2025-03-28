@@ -27,9 +27,12 @@ exports.processCardPayment = async (req, res) => {
 };
 
 // 📤 Upload Bank Slip
+const upload = require("./multer"); // Import multer configuration
+
+// 📤 Upload Bank Slip
 exports.uploadBankSlip = async (req, res) => {
   try {
-    const { userId, bankHolder, bankName, bankBranch, paymentDate } = req.body;
+    const { userId, bankHolder, bankName, bankBranch, paymentDate, amount } = req.body;
     const bankSlip = req.file ? req.file.path : null; // Store file path
 
     if (!userId || !bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
@@ -42,7 +45,8 @@ exports.uploadBankSlip = async (req, res) => {
       bankName,
       bankBranch,
       paymentDate,
-      bankSlip,
+      amount,
+      bankSlip, // Store file path in the database
       paymentMethod: "Bank Transfer",
       status: "Pending",
     });
@@ -53,6 +57,7 @@ exports.uploadBankSlip = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
+
 
 // 📜 Fetch All Payments
 exports.getPayments = async (req, res) => {
