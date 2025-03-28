@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8070; //8070 OR 8070 eka nattan wena available 
 const dotenv = require("dotenv");
 app.use(cors()); //declare karapuwa use karanawa
 app.use(bodyParser.json());
-
+ 
 const URL = "mongodb+srv://kavishkapathum:200113105017@cluster0.8b0nu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(URL, {
@@ -28,10 +28,18 @@ connection.once("open", () => {
 
 const authRouter = require("./routes/authRoutes.js");
 const pricepredictRouter = require("./routes/pricepredictRoutes.js");
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
+
+// Routes
+app.use('/api', require('./routes/SellerRoute'));
+app.use('/api', require('./routes/PropertySellerRoute'));
 
 app.use("/auth", authRouter);
 app.use("/propertyfuture",pricepredictRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
 
+app.use('/api', require('./routes/SellerRoute'));
+app.use('/api', require('./routes/PropertySellerRoute'));
 
 app.listen(PORT, () => {
   //ara port eka listn krnna
