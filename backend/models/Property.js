@@ -11,7 +11,14 @@ const propertySchema = new Schema({
   description: { type: String, required: true },
   sellerID: { type: String, required: true },
   images: [{ type: String, required: true }], // Array of image URLs
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true },
+  availableSlots: [{
+    date: { type: Date, required: true },
+    startTime: { type: String, required: true },
+    endTime: { type: String, required: true },
+    isBooked: { type: Boolean, default: false }
+  }]
 });
 
 module.exports = mongoose.model('Property', propertySchema);

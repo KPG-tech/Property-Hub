@@ -14,6 +14,15 @@ function AddProperty() {
     description: '',
     sellerID: '',
   });
+  
+  // Add state for time slots
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [newSlot, setNewSlot] = useState({
+    date: '',
+    startTime: '',
+    endTime: ''
+  });
+
   useEffect(() => {
     const SelleruserId = localStorage.getItem('SelleruserId');
     if (SelleruserId) {
@@ -23,17 +32,14 @@ function AddProperty() {
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-
     if (images.length + files.length > 4) {
       alert('You can only upload up to 4 images.');
       return;
     }
-
     const newImages = files.map((file) => ({
       id: URL.createObjectURL(file),
       file,
     }));
-
     setImages([...images, ...newImages]);
   };
 
@@ -43,6 +49,24 @@ function AddProperty() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle time slot changes
+  const handleSlotChange = (e) => {
+    setNewSlot({ ...newSlot, [e.target.name]: e.target.value });
+  };
+
+  const addTimeSlot = () => {
+    if (newSlot.date && newSlot.startTime && newSlot.endTime) {
+      setTimeSlots([...timeSlots, { ...newSlot, isBooked: false }]);
+      setNewSlot({ date: '', startTime: '', endTime: '' });
+    } else {
+      alert('Please fill all time slot fields');
+    }
+  };
+
+  const removeTimeSlot = (index) => {
+    setTimeSlots(timeSlots.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -56,6 +80,7 @@ function AddProperty() {
     data.append('address', formData.address);
     data.append('description', formData.description);
     data.append('sellerID', formData.sellerID);
+    data.append('availableSlots', JSON.stringify(timeSlots)); // Add time slots
     images.forEach((image) => {
       data.append('images', image.file);
     });
@@ -70,7 +95,6 @@ function AddProperty() {
       if (response.ok) {
         alert('Property added successfully');
         navigate(`/sellerPropertyDetails`);
-        // Reset form
         setFormData({
           title: '',
           type: '',
@@ -81,6 +105,7 @@ function AddProperty() {
           sellerID: '',
         });
         setImages([]);
+        setTimeSlots([]);
       } else {
         alert(result.message);
       }
@@ -168,6 +193,53 @@ function AddProperty() {
                 </button>
               </div>
             ))}
+          </div>
+          <div className='auth_card_from_input'>
+            <label className='auth_card_lable'>Available Time Slots</label>
+            <div className="time-slot-inputs">
+              <input
+                type="date"
+                name="date"
+                value={newSlot.date}
+                onChange={handleSlotChange}
+                className='auth_card_input'
+              />
+              <input
+                type="time"
+                name="startTime"
+                value={newSlot.startTime}
+                onChange={handleSlotChange}
+                className='auth_card_input'
+              />
+              <input
+                type="time"
+                name="endTime"
+                value={newSlot.endTime}
+                onChange={handleSlotChange}
+                className='auth_card_input'
+              />
+              <button type="button" className="from_btn" onClick={addTimeSlot}>
+                Add Slot
+              </button>
+            </div>
+            
+            {/* Display added time slots */}
+            <div className="time-slots-list">
+              {timeSlots.map((slot, index) => (
+                <div key={index} className="time-slot-item">
+                  <span>
+                    {new Date(slot.date).toLocaleDateString()} {slot.startTime} - {slot.endTime}
+                  </span>
+                  <button
+                    type="button"
+                    className="remove_btn"
+                    onClick={() => removeTimeSlot(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           <button className='from_btn' type="submit">Add Property</button>

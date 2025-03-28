@@ -6,7 +6,11 @@ import SellerAddProperty from "./Components/PropertyListings/Seller/PropertyAdd/
 import SellerUpdateProperty from "./Components/PropertyListings/Seller/PropertyUpdate/PropertyUpdate";
 import SellerPropertyDetails from "./Components/PropertyListings/Seller/PropertyDetails/PropertyDetails";
 import PropertyPage from "./Components/PropertyListings/User/PropertyPage/PropertyPage";
+import UserBookings from "./Components/PropertyListings/User/Booking/UserBookings";
+import PropertySlots from "./Components/PropertyListings/User/Booking/PropertySlots";
+
 function App() {
+  const userId = '67e69eada0d1f11b129d382e'; 
   return (
     <div >
       <React.Fragment>
@@ -19,6 +23,9 @@ function App() {
           <Route path="/sellerPropertyDetails" element={<SellerPropertyDetails />} />
           {/*User*/}
           <Route path="/propertyPage" element={<PropertyPage />} />
+          <Route path="/my-bookings" element={<UserBookings userId={userId} />} />
+          <Route path="/properties/:propertyId/slots" element={<PropertySlots />} />
+
         </Routes>
       </React.Fragment>
     </div>

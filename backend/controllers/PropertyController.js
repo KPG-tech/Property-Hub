@@ -18,8 +18,24 @@ const upload = multer({ storage: storage }).array('images', 4); // Allow up to 4
 // Add a new property
 const addProperty = async (req, res) => {
   try {
-    const { title, type, price, phone, address, description, sellerID } = req.body;
-    const images = req.files.map(file => file.path); // Get the paths of the uploaded images
+    const { 
+      title, 
+      type, 
+      price, 
+      phone, 
+      address, 
+      description, 
+      sellerID,
+      availableSlots // Add this to receive time slots
+    } = req.body;
+    
+    const images = req.files.map(file => file.path);
+    
+    // Parse availableSlots if it comes as a string
+    let slots = availableSlots;
+    if (typeof availableSlots === 'string') {
+      slots = JSON.parse(availableSlots);
+    }
 
     const newProperty = new Property({
       title,
@@ -29,7 +45,9 @@ const addProperty = async (req, res) => {
       address,
       description,
       sellerID,
-      images
+      images,
+      owner:sellerID,
+      availableSlots: slots || [] // Add empty array as default if no slots provided
     });
 
     await newProperty.save();

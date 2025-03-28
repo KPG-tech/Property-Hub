@@ -72,3 +72,31 @@ select:focus {
     margin-left: 5px;
     transition: background-color 0.3s ease;
 }
+
+
+.time-slot-inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.time-slots-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-slot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #113648;
+  border-radius: 3px;
+}
+
+.time-slot-item span {
+  color: #113648;
+}

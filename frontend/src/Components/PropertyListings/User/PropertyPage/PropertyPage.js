@@ -149,6 +149,7 @@ import './PropertyPage.css';
 import { FaSearch } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { IoLocation } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 function PropertyPage() {
   const [properties, setProperties] = useState([]);
@@ -156,6 +157,7 @@ function PropertyPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const navigate = useNavigate();
 
   // Fetch properties data from the backend API
   useEffect(() => {
@@ -196,6 +198,10 @@ function PropertyPage() {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+  };
+
+  const handleViewSlots = (propertyId) => {
+    navigate(`/properties/${propertyId}/slots`);
   };
 
   return (
@@ -272,7 +278,10 @@ function PropertyPage() {
                     {/* New Buttons Section */}
                     <div className="property_card_buttons">
                       <button className="pay_now_btn">Pay Now</button>
-                      <button className="book_now_btn">Book Now</button>
+                      <button 
+                      className="book_now_btn"
+                      onClick={() => handleViewSlots(property._id)}
+                      >Book Now</button>
                       <button className="predict_price_btn">Predict Price</button>
                     </div>
                     
