@@ -1,0 +1,146 @@
+/* Common Payment Page Styles */
+.payment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+}
+
+.payment-heading {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.input-group input[type="file"] {
+  padding: 8px;
+}
+
+.card-number-input {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.card-number-input input {
+  width: 22%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+  background-color: #45a049;
+  transform: scale(1.02);
+}
+
+.message {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: center;
+  color: green;
+}
+
+.message.error {
+  color: red;
+}
+
+.message.success {
+  color: green;
+}
+
+.link-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.link-container a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.link-container a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .payment-form {
+    padding: 15px;
+  }
+
+  .input-group input,
+  button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .payment-heading {
+    font-size: 24px;
+  }
+
+  .card-number-input {
+    gap: 5px;
+  }
+
+  .card-number-input input {
+    font-size: 16px;
+  }
+}
