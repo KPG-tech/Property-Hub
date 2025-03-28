@@ -1,32 +1,8 @@
-// import React, { useState } from 'react';
-// import PropertyList from './component/PropertyList';
-// import BookingForm from './component/BookingForm';
-// import UserBookings from './component/UserBookings';
-
-// function App() {
-//   const [selectedProperty, setSelectedProperty] = useState(null);
-//   const [userId] = useState('67e4161d34de40d36aeeea4b'); // Replace with actual user ID from auth
-
-//   return (
-//     <div className="App">
-//       <h1>Property Viewing Booker</h1>
-//       {!selectedProperty ? (
-//         <PropertyList onSelectProperty={setSelectedProperty} />
-//       ) : (
-//         <BookingForm propertyId={selectedProperty} />
-//       )}
-//       <UserBookings userId={userId} />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './component/Home';
 import UserBookings from './component/UserBookings';
+import PropertySlots from './component/PropertySlots';
 
 function App() {
   const userId = '67e4161d34de40d36aeeea4b'; // Replace with actual user ID from auth
@@ -46,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/my-bookings" element={<UserBookings userId={userId} />} />
+          <Route path="/properties/:propertyId/slots" element={<PropertySlots />} />
         </Routes>
       </div>
     </Router>

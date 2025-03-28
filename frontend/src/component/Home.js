@@ -1,87 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-  const [slots, setSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [bookingStatus, setBookingStatus] = useState('');
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8070/propertyBooking/properties')
-      .then(response => setProperties(response.data))
-      .catch(error => console.error(error));
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:8070/propertyBooking/properties');
+        setProperties(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
   }, []);
 
-  useEffect(() => {
-    if (selectedProperty) {
-      axios.get(`http://localhost:8070/propertyBooking/properties/${selectedProperty}/slots`)
-        .then(response => setSlots(response.data))
-        .catch(error => console.error(error));
-    }
-  }, [selectedProperty]);
-
-  const handleBooking = async () => {
-    try {
-      const response = await axios.post('http://localhost:8070/propertyBooking/bookings', {
-        propertyId: selectedProperty,
-        userId: '67e4161d34de40d36aeeea4b',
-        date: selectedSlot.date.split('T')[0],
-        startTime: selectedSlot.startTime,
-        endTime: selectedSlot.endTime
-      });
-      setBookingStatus('Booking request sent successfully!');
-      setSelectedSlot(null);
-    } catch (error) {
-      setBookingStatus('Error creating booking');
-    }
+  const handleViewSlots = (propertyId) => {
+    navigate(`/properties/${propertyId}/slots`);
   };
 
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Available Properties</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.map(property => (
-          <div key={property._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="p-4">
-              <h3 className="text-xl font-semibold text-gray-800">{property.title}</h3>
-              <p className="text-gray-600">{property.address}</p>
-              <button
-                onClick={() => setSelectedProperty(selectedProperty === property._id ? null : property._id)}
-                className="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-              >
-                {selectedProperty === property._id ? 'Hide Slots' : 'View Available Slots'}
-              </button>
-            </div>
-            {selectedProperty === property._id && (
-              <div className="p-4 bg-gray-50">
-                <h4 className="text-lg font-semibold text-gray-700 mb-2">Book a Viewing</h4>
-                <select
-                  onChange={(e) => setSelectedSlot(slots[e.target.value])}
-                  className="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map(property => (
+            <div key={property._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-gray-800">{property.title}</h3>
+                <p className="text-gray-600">{property.address}</p>
+                <button
+                  onClick={() => handleViewSlots(property._id)}
+                  className="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
                 >
-                  <option value="">Select a time slot</option>
-                  {slots.filter(slot => !slot.isBooked).map((slot, index) => (
-                    <option key={index} value={index}>
-                      {new Date(slot.date).toLocaleDateString()} {slot.startTime} - {slot.endTime}
-                    </option>
-                  ))}
-                </select>
-                {selectedSlot && (
-                  <button
-                    onClick={handleBooking}
-                    className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition"
-                  >
-                    Request Viewing
-                  </button>
-                )}
-                {bookingStatus && <p className="mt-2 text-sm text-gray-600">{bookingStatus}</p>}
+                  View Available Slots
+                </button>
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
