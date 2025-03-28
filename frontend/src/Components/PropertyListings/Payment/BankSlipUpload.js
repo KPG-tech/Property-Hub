@@ -17,7 +17,7 @@ function BankSlipUploadPage() {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     // Validation for form fields
@@ -35,8 +35,31 @@ function BankSlipUploadPage() {
       return;
     }
 
-    setMessage("✅ Bank details and slip submitted successfully!");
-    // Here you can send the form data (bank details and file) to the server or handle it as required.
+    // Prepare form data to be sent to the API
+    const formData = new FormData();
+    formData.append("bankSlip", bankSlip);
+    formData.append("bankHolder", bankHolder);
+    formData.append("bankName", bankName);
+    formData.append("bankBranch", bankBranch);
+    formData.append("paymentDate", paymentDate);
+
+    try {
+      // Make the API call to upload the bank slip and bank details
+      const response = await fetch("http://localhost:8070/api/payment/upload-bank-slip", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setMessage("✅ Bank slip uploaded and details saved successfully!");
+      } else {
+        setMessage("❌ Error uploading bank slip. Please try again.");
+      }
+    } catch (error) {
+      setMessage("❌ Error uploading data. Please try again.");
+    }
   };
 
   // Get today's date in YYYY-MM-DD format
