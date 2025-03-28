@@ -1,0 +1,242 @@
+.serch_br {
+  width: 300px;
+  border: 1px solid #113648;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+.property_main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 25px;
+}
+
+.main_continer {
+  width: 100%;
+}
+.property_main_sub {
+  width: 1440px;
+  padding: 0px 100px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 40px 0;
+}
+.property_action_bar {
+  background-color: white;
+  padding: 25px;
+  width: 250px;
+}
+.serch_bar_full {
+  width: 100%;
+  border-radius: 3px;
+  background-color: white;
+  border: 1px solid #113648;
+  display: flex;
+  justify-content: center;
+  padding: 3px 8px;
+  align-items: center;
+  color: #113648;
+}
+.search_input {
+  width: 100%;
+  border: 0;
+}
+.serch_bar_icon {
+  cursor: pointer;
+}
+.property_action_bar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 35px;
+  flex-direction: column;
+}
+.topic_cat {
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #113648;
+  font-size: 13px;
+}
+.cat_name {
+  background-color: #1136482f;
+  padding: 3px 10px;
+  margin: 10px 0;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.property_card_continer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+.property_card {
+  width: 310px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 10px 5px;
+}
+.property_card_img_continer {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+}
+.property_card_img {
+  width: 140px;
+  height: 140px;
+  border-radius: 3px;
+}
+.property_card_title {
+  width: 100%;
+  text-align: center;
+  color: #113648;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+.property_type_con {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.price_property {
+  color: #113648;
+  font-weight: 600;
+  font-size: 26px;
+}
+.property_type {
+  color: #113648dc;
+  font-weight: 500;
+  font-size: 16px;
+}
+.details_prpaty {
+  color: gray;
+  font-size: 15px;
+}
+.FaPhone,
+.IoLocation {
+  color: #113648;
+  font-size: 18px;
+}
+.property_phone {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.property_adddr {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.read_more {
+  font-weight: 500;
+  cursor: pointer;
+}
+.prpty_data_disply_continer {
+  width: 1440px;
+  padding: 40px 100px;
+}
+.prpty_data_disply_continer_main {
+  background-color: rgb(216, 236, 244);
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+.prpty_data_disply_continer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+}
+.prpty_data_card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.prpty_data_card_topic {
+  font-size: 40px;
+  font-weight: 600;
+  color: #113648;
+  text-transform: uppercase;
+}
+.property_card_img_card {
+  width: 500px;
+  border-radius: 15px;
+}
+.prpty_data_card_pera {
+  font-size: 18px;
+  font-weight: 400;
+}
+.property_card_continer_full{
+  width: 100%;
+}
+
+
+
+
+
+
+
+.property_card_buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.property_card_buttons button {
+  flex: 1;
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.pay_now_btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.pay_now_btn:hover {
+  background-color: #218838;
+}
+
+.book_now_btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.book_now_btn:hover {
+  background-color: #0056b3;
+}
+
+.predict_price_btn {
+  background-color: #ffc107;
+  color: black;
+}
+
+.predict_price_btn:hover {
+  background-color: #e0a800;
+}

@@ -28,6 +28,11 @@ connection.once("open", () => {
 
 const authRouter = require("./routes/authRoutes.js");
 const pricepredictRouter = require("./routes/pricepredictRoutes.js");
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
+
+// Routes
+app.use('/api', require('./routes/SellerRoute'));
+app.use('/api', require('./routes/PropertySellerRoute'));
 
 app.use("/auth", authRouter);
 app.use("/propertyfuture",pricepredictRouter);
