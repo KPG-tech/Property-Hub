@@ -271,8 +271,7 @@ function PropertyPage() {
 
                     {/* New Buttons Section */}
                     <div className="property_card_buttons">
-                      <button className="pay_now_btn">Pay Now</button>
-                      <button className="book_now_btn">Book Now</button>
+                      <button className="book_now_btn">Book a Time</button>
                       <button className="predict_price_btn">Predict Price</button>
                     </div>
                     
