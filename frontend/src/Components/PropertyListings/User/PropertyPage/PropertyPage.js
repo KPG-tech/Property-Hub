@@ -246,7 +246,7 @@ function PropertyPage() {
                     </div>
                     <p className='property_card_title'>{property.title}</p>
                     <div className='property_type_con'>
-                      <p className='price_property'>${property.price}</p>
+                      <p className='price_property'>LKR-{property.price}</p>
                       <p className='property_type'>{property.type}</p>
                     </div>
                     <div>
