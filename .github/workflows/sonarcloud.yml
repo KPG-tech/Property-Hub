@@ -1,0 +1,33 @@
+name: SonarCloud Scan
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Disable shallow clone for better analysis
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Adjust to your Node.js version
+      - name: Install Frontend Dependencies
+        run: cd frontend && npm install
+      - name: Install Backend Dependencies
+        run: cd backend && npm install
+      - name: Run Tests and Generate Coverage
+        run: |
+          cd frontend && npm test -- --coverage --coverageReporters=lcov || true
+          cd ../backend && npm test -- --coverage --coverageReporters=lcov || true
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: c751917fb90a413bf0a1954f081cada7215bc7c6
+          SONAR_HOST_URL: https://sonarcloud.io
+        with:
+          projectBaseDir: .
