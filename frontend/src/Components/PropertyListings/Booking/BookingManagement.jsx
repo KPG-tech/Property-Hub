@@ -28,7 +28,7 @@ const BookingManagement = () => {
   // Handle booking status update (accept/reject)
   const handleBookingStatus = async (bookingId, status) => {
     try {
-      await axios.put(`/api/bookings/${bookingId}`, { status });
+      await axios.put(`http://localhost:8070/propertyBooking/bookings/${bookingId}`, { status });
       setProperties(properties.map(property => ({
         ...property,
         availableSlots: property.availableSlots.map(slot =>
@@ -44,7 +44,7 @@ const BookingManagement = () => {
   const handleCancelBooking = async (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
-        await axios.delete(`/api/bookings/${bookingId}/cancel`);
+        await axios.delete(`http://localhost:8070/propertyBooking/bookings/${bookingId}/cancel`);
         setProperties(properties.map(property => ({
           ...property,
           availableSlots: property.availableSlots.map(slot =>
@@ -63,7 +63,7 @@ const BookingManagement = () => {
   const handleAddSlot = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/properties/${newSlot.propertyId}/slots`, {
+      const response = await axios.post(`http://localhost:8070/propertyBooking/properties/${newSlot.propertyId}/slots`, {
         date: newSlot.date,
         startTime: newSlot.startTime,
         endTime: newSlot.endTime
@@ -89,7 +89,7 @@ const BookingManagement = () => {
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/properties/${editSlot.propertyId}/slots/${editSlot._id}`, {
+      const response = await axios.put(`http://localhost:8070/propertyBooking/properties/${editSlot.propertyId}/slots/${editSlot._id}`, {
         date: editSlot.date,
         startTime: editSlot.startTime,
         endTime: editSlot.endTime
@@ -114,7 +114,7 @@ const BookingManagement = () => {
   const handleRemoveSlot = async (propertyId, slotId) => {
     if (window.confirm('Are you sure you want to remove this slot?')) {
       try {
-        await axios.delete(`/api/properties/${propertyId}/slots/${slotId}`);
+        await axios.delete(`http://localhost:8070/propertyBooking/properties/${propertyId}/slots/${slotId}`);
         setProperties(properties.map(property =>
           property._id === propertyId
             ? {
