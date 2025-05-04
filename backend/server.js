@@ -34,13 +34,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve s
 // Routes
 app.use('/api', require('./routes/SellerRoute'));
 app.use('/api', require('./routes/PropertySellerRoute'));
+const paymentRoutes = require("./routes/paymentRoutes");
 
 app.use("/auth", authRouter);
 app.use("/propertyfuture",pricepredictRouter);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
 
-app.use('/api', require('./routes/SellerRoute'));
-app.use('/api', require('./routes/PropertySellerRoute'));
+
+app.use("/api/payment", paymentRoutes);
 
 app.use("/propertyBooking",bookingRouter);
 
