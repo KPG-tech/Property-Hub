@@ -25,7 +25,7 @@ router.delete('/bookings/:id', deleteBooking);
 router.get('/sellers/:sellerId/properties-slots', getSellerPropertiesWithSlots);
 router.post('/properties/:propertyId/slots', addPropertySlot);
 router.put('/properties/:propertyId/slots/:slotId', updatePropertySlot);
-router.delete('/properties/:propertyId/slots/:slotUnnamed: true')
+router.delete('/properties/:propertyId/slots/:slotId',removePropertySlot)
 router.delete('/bookings/:bookingId/cancel', cancelConfirmedBooking);
 
 module.exports = router;
