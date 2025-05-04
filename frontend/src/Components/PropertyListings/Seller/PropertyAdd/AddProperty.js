@@ -94,7 +94,7 @@ function AddProperty() {
       const result = await response.json();
       if (response.ok) {
         alert('Property added successfully');
-        navigate(`/sellerPropertyDetails`);
+        navigate(`/seller/property-details`);
         setFormData({
           title: '',
           type: '',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { LuBadgeCheck } from "react-icons/lu";
-import { LuBadgeX } from "react-icons/lu";
+import { LuBadgeCheck, LuBadgeX } from "react-icons/lu";
+
 function Register() {
   const [regSuccess, setRegSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -8,6 +8,7 @@ function Register() {
     phone: '',
     email: '',
     username: '',
+    role: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -47,7 +48,7 @@ function Register() {
       if (response.status === 201) {
         setRegSuccess(true);
         setTimeout(() => {
-          window.location.href = '/sellerLogin';
+          window.location.href = '/login';
         }, 1000);
       } else {
         setError('Registration failed');
@@ -56,6 +57,7 @@ function Register() {
       setError('An error occurred. Please try again.');
     }
   };
+
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -66,11 +68,12 @@ function Register() {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
   return (
     <div className='auth_continer_reg'>
       <div className='auth_card'>
         <div className='auth_card_right'>
-          <p className='auth_card_topic'>Seller Register</p>
+          <p className='auth_card_topic'>Register</p>
           <form className='auth_card_from_reg' onSubmit={handleSubmit}>
             <div className='auth_card_from_input'>
               <label className='auth_card_lable'>Full Name</label>
@@ -134,6 +137,21 @@ function Register() {
               />
             </div>
             <div className='auth_card_from_input'>
+              <label className='auth_card_lable'>Role</label>
+              <select
+                className='auth_card_input'
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>Select your role</option>
+                <option value="seller">Seller</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div className='auth_card_from_input'>
               <label className='auth_card_lable'>Password</label>
               <input
                 className='auth_card_input'
@@ -147,7 +165,7 @@ function Register() {
             </div>
             <button type="submit" className='auth_btn'>Register</button>
           </form>
-          <p className='no_accc'>if you already have an account please <span onClick={() => (window.location.href = '/sellerLogin')} className='no_accc_btn'>Login</span></p>
+          <p className='no_accc'>if you already have an account please <span onClick={() => (window.location.href = '/login')} className='no_accc_btn'>Login</span></p>
         </div>
         <div className='auth_reg_card_lft_img'></div>
       </div>
@@ -159,7 +177,6 @@ function Register() {
           </div>
         </div>
       )}
-
       {error && (
         <div className='seler_alert_box'>
           <div className='no_alert_box_seller'>

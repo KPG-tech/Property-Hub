@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const UserBookings = ({ userId }) => {
+const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [editBookingId, setEditBookingId] = useState(null);
   const [newSlot, setNewSlot] = useState({ date: '', startTime: '', endTime: '' });
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
   const [alert, setAlert] = useState({ show: false, message: '', type: '' });
+  const userId = localStorage.getItem('SelleruserId');
 
   useEffect(() => {
     const fetchBookings = async () => {

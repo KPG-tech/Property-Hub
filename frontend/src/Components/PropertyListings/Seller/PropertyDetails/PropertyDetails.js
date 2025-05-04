@@ -39,7 +39,7 @@ function PropertyDetails() {
   };
   
   const handleUpdate = (id) => {
-    navigate(`/updateproperty/${id}`);
+    navigate(`/seller/update-property/${id}`);
   };
 
   const generatePDF = () => {

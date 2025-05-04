@@ -7,7 +7,12 @@ const {
   updateBookingStatus,
   getUserBookings,
   updateBooking,
-  deleteBooking
+  deleteBooking,
+  getSellerPropertiesWithSlots,
+  addPropertySlot,
+  updatePropertySlot,
+  removePropertySlot,
+  cancelConfirmedBooking
 } = require('../controllers/bookingController');
 
 router.get('/properties', getProperties);
@@ -17,5 +22,10 @@ router.put('/bookings/:id', updateBookingStatus);
 router.get('/users/:userId/bookings', getUserBookings);
 router.put('/bookings/:id/update', updateBooking);
 router.delete('/bookings/:id', deleteBooking);
+router.get('/sellers/:sellerId/properties-slots', getSellerPropertiesWithSlots);
+router.post('/properties/:propertyId/slots', addPropertySlot);
+router.put('/properties/:propertyId/slots/:slotId', updatePropertySlot);
+router.delete('/properties/:propertyId/slots/:slotUnnamed: true')
+router.delete('/bookings/:bookingId/cancel', cancelConfirmedBooking);
 
 module.exports = router;

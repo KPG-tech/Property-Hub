@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Test from './img/loginbk.png';
 import ProImg from './img/prp.jpg';
 import './PropertyPage.css';
@@ -165,13 +165,10 @@ function PropertyPage() {
 
                     {/* New Buttons Section */}
                     <div className="property_card_buttons">
-                      <button className="pay_now_btn">Pay Now</button>
                       <button 
                       className="book_now_btn"
                       onClick={() => handleViewSlots(property._id)}
                       >Book Now</button>
-                      <button className="predict_price_btn">Predict Price</button>
-                      <button className="book_now_btn">Book Now</button>
                       <button 
                         className="predict_price_btn" 
                         onClick={() => handlePredictPrice(property)}

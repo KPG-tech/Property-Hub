@@ -23,10 +23,22 @@ function Login() {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('SelleruserId', response.data.seller._id);
+        localStorage.setItem('role',response.data.seller.role);
         setLoginSuccess(true);
-        setTimeout(() => {
-          navigate(`/sellerPropertyDetails`);
-        }, 1000);
+        if(response.data.seller.role=='seller'){
+          setTimeout(() => {
+            navigate(`/seller/seller-property-details`);
+          }, 1000);
+        }else if(response.data.seller.role=='seller'){
+          setTimeout(() => {
+            navigate(`/admin/payments`);
+          }, 1000);
+        }else{
+          setTimeout(() => {
+            navigate(`/`);
+          }, 1000);
+        }
+        
       } else {
         setError('Login failed! Please check your username and password.');
       }
@@ -49,7 +61,7 @@ function Login() {
       <div className='auth_card'>
         <div className='auth_card_lft_img'></div>
         <div className='auth_card_right'>
-          <p className='auth_card_topic'>Seller Login</p>
+          <p className='auth_card_topic'>Login</p>
           <form className='auth_card_from' onSubmit={handleLogin}>
             <div className='auth_card_from_input'>
               <label className='auth_card_lable'>Email</label>
@@ -82,7 +94,7 @@ function Login() {
           <p className='no_accc'>
             If you don't have an account, please{' '}
             <span
-              onClick={() => navigate('/sellerRegister')}
+              onClick={() => navigate('/register')}
               className='no_accc_btn'
             >
               Register
