@@ -1,6 +1,4 @@
-
 import { useState, useEffect } from "react";
-// import { useNavigate } from 'react-router-dom';
 import Test from './img/loginbk.png';
 import ProImg from './img/prp.jpg';
 import './PropertyPage.css';
@@ -15,7 +13,7 @@ function PropertyPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [predictionLoading, setPredictionLoading] = useState(false);
+  const [predictionLoading, setPredictionLoading] = useState({});
   const navigate = useNavigate();
 
   // Fetch properties data from the backend API
@@ -58,15 +56,16 @@ function PropertyPage() {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
+
   const handlePredictPrice = async (property) => {
-    setPredictionLoading(true);
+    setPredictionLoading(prev => ({ ...prev, [property._id]: true }));
     try {
       const requestBody = {
         price: property.price,
         date: new Date().toISOString().split('T')[0],
         location: property.address,
         propertyType: property.type,
-        areaSqFt: 10000, // Hardcoded as requested
+        areaSqFt: 10000,
         nearbyInfrastructure: property.description,
       };
 
@@ -80,11 +79,11 @@ function PropertyPage() {
 
       const predictionData = await response.json();
       
-      // Navigate to prediction page with data
       navigate('/prediction-results', { state: { predictionData } });
     } catch (error) {
       console.error('Error predicting price:', error);
-      setPredictionLoading(false);
+    } finally {
+      setPredictionLoading(prev => ({ ...prev, [property._id]: false }));
     }
   };
 
@@ -163,21 +162,19 @@ function PropertyPage() {
                       )}
                     </p>
 
-                    {/* New Buttons Section */}
                     <div className="property_card_buttons">
                       <button 
-                      className="book_now_btn"
-                      onClick={() => handleViewSlots(property._id)}
+                        className="book_now_btn"
+                        onClick={() => handleViewSlots(property._id)}
                       >Book Now</button>
                       <button 
                         className="predict_price_btn" 
                         onClick={() => handlePredictPrice(property)}
-                        disabled={predictionLoading}
+                        disabled={predictionLoading[property._id]}
                       >
-                        {predictionLoading ? 'Loading...' : 'Predict Price'}
+                        {predictionLoading[property._id] ? 'Loading...' : 'Predict Price'}
                       </button>
                     </div>
-                    
                   </div>
                 ))}
               </div>
