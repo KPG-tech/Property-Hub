@@ -153,7 +153,7 @@ function Payment() {
           onChange={handleAmountChange}
         />
 
-        <button onClick={handlePayment}>Pay Now</button>
+        <button className="payment" onClick={handlePayment}>Pay Now</button>
         {message && <p className="message">{message}</p>}
       </div>
     </div>

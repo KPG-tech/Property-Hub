@@ -93,23 +93,70 @@ exports.createBooking = async (req, res) => {
   }
 };
 
+// exports.updateBookingStatus = async (req, res) => {
+//   try {
+//     const { status } = req.body;
+//     const booking = await Booking.findById(req.params.id)
+//       .populate('user')
+//       .populate('property');
+//
+//     if (!booking) return res.status(404).json({ message: 'Booking not found' });
+//
+//     booking.status = status;
+//
+//     if (status === 'confirmed') {
+//       const html = compileTemplate('bookingConfirmed', {
+//         userName: booking.user.name,
+//         propertyTitle: booking.property.title,
+//         date: booking.date.toLocaleDateString(),
+//         startTime: booking.startTime
+//       });
+//
+//       // await transporter.sendMail({
+//       //   from: 'ddmalalagama@gmail.com',
+//       //   to: booking.user.email,
+//       //   subject: 'Booking Confirmed',
+//       //   html
+//       // });
+//     } else if (status === 'rejected') {
+//       const property = await Property.findById(booking.property);
+//       const slot = property.availableSlots.find(slot =>
+//         slot.date.toISOString().split('T')[0] === booking.date.toISOString().split('T')[0] &&
+//         slot.startTime === booking.startTime
+//       );
+//       if (slot) {
+//         slot.isBooked = false;
+//         await property.save();
+//       }
+//     }
+//
+//     await booking.save();
+//     res.json(booking);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, locationLink } = req.body;
     const booking = await Booking.findById(req.params.id)
-      .populate('user')
-      .populate('property');
-    
+        .populate('user')
+        .populate('property');
+
     if (!booking) return res.status(404).json({ message: 'Booking not found' });
 
     booking.status = status;
-    
+    if (locationLink) {
+      booking.locationLink = locationLink;
+    }
+
     if (status === 'confirmed') {
       const html = compileTemplate('bookingConfirmed', {
         userName: booking.user.name,
         propertyTitle: booking.property.title,
         date: booking.date.toLocaleDateString(),
-        startTime: booking.startTime
+        startTime: booking.startTime,
+        locationLink: booking.locationLink || 'Not provided'
       });
 
       await transporter.sendMail({
@@ -120,9 +167,9 @@ exports.updateBookingStatus = async (req, res) => {
       });
     } else if (status === 'rejected') {
       const property = await Property.findById(booking.property);
-      const slot = property.availableSlots.find(slot => 
-        slot.date.toISOString().split('T')[0] === booking.date.toISOString().split('T')[0] &&
-        slot.startTime === booking.startTime
+      const slot = property.availableSlots.find(slot =>
+          slot.date.toISOString().split('T')[0] === booking.date.toISOString().split('T')[0] &&
+          slot.startTime === booking.startTime
       );
       if (slot) {
         slot.isBooked = false;
@@ -249,7 +296,7 @@ exports.getSellerPropertiesWithSlots = async (req, res) => {
 
     const result = await Promise.all(properties.map(async (property) => {
       const bookings = await Booking.find({ property: property._id })
-        .populate('user', 'name email')
+        .populate('user', 'fullname email')
         .lean();
 
       const slotsWithBookingInfo = property.availableSlots.map(slot => {
@@ -261,10 +308,11 @@ exports.getSellerPropertiesWithSlots = async (req, res) => {
           ...slot,
           isBooked: slot.isBooked,
           bookingStatus: booking ? booking.status : null,
-          bookedBy: booking ? { name: booking.user.name, email: booking.user.email } : null,
+          bookedBy: booking ? { name: booking.user.fullname, email: booking.user.email } : null,
           bookingId: booking ? booking._id : null
         };
       });
+
 
       return {
         ...property,

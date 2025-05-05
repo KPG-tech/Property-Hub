@@ -9,6 +9,7 @@ const PropertySlots = () => {
   const [bookingStatus, setBookingStatus] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const userId = localStorage.getItem('SelleruserId');
 
   useEffect(() => {
     const fetchSlots = async () => {
@@ -36,7 +37,7 @@ const PropertySlots = () => {
       setLoading(true);
       const response = await axios.post('http://localhost:8070/propertyBooking/bookings', {
         propertyId,
-        userId: '67e69eada0d1f11b129d382e',
+        userId: userId,
         date: selectedSlot.date.split('T')[0],
         startTime: selectedSlot.startTime,
         endTime: selectedSlot.endTime

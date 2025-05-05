@@ -135,19 +135,19 @@ const UserBookings = () => {
 
                 {booking.status === 'pending' && (
                   <div className="mt-6 flex space-x-4">
-                    <button
-                      onClick={() => setEditBookingId(booking._id === editBookingId ? null : booking._id)}
-                      className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2.5 rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 disabled:opacity-60"
-                      disabled={actionLoading === booking._id}
-                    >
-                      {actionLoading === booking._id && editBookingId === booking._id ? (
-                        'Updating...'
-                      ) : editBookingId === booking._id ? (
-                        'Cancel Edit'
-                      ) : (
-                        'Edit Booking'
-                      )}
-                    </button>
+                    {/*<button*/}
+                    {/*  onClick={() => setEditBookingId(booking._id === editBookingId ? null : booking._id)}*/}
+                    {/*  className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2.5 rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 disabled:opacity-60"*/}
+                    {/*  disabled={actionLoading === booking._id}*/}
+                    {/*>*/}
+                    {/*  {actionLoading === booking._id && editBookingId === booking._id ? (*/}
+                    {/*    'Updating...'*/}
+                    {/*  ) : editBookingId === booking._id ? (*/}
+                    {/*    'Cancel Edit'*/}
+                    {/*  ) : (*/}
+                    {/*    'Edit Booking'*/}
+                    {/*  )}*/}
+                    {/*</button>*/}
                     <button
                       onClick={() => handleDelete(booking._id)}
                       className="flex-1 bg-gradient-to-r from-red-500 to-pink-500 text-white py-2.5 rounded-xl hover:from-red-600 hover:to-pink-600 transition-all duration-200 disabled:opacity-60"

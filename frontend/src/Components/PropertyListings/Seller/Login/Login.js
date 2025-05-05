@@ -27,7 +27,7 @@ function Login() {
         setLoginSuccess(true);
         if(response.data.seller.role=='seller'){
           setTimeout(() => {
-            navigate(`/seller/seller-property-details`);
+            navigate(`/seller/property-details`);
           }, 1000);
         }else if(response.data.seller.role=='seller'){
           setTimeout(() => {
