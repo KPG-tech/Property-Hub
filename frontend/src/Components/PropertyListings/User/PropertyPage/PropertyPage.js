@@ -15,6 +15,8 @@ function PropertyPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [predictionLoading, setPredictionLoading] = useState({});
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('role');
+  const userRole = localStorage.getItem('role');
 
   // Fetch properties data from the backend API
   useEffect(() => {
@@ -163,10 +165,11 @@ function PropertyPage() {
                     </p>
 
                     <div className="property_card_buttons">
+                    {isLoggedIn && userRole === 'user' && (
                       <button 
                         className="book_now_btn"
                         onClick={() => handleViewSlots(property._id)}
-                      >Book Now</button>
+                      >Book Now</button>)}
                       <button 
                         className="predict_price_btn" 
                         onClick={() => handlePredictPrice(property)}
