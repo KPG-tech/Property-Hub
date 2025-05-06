@@ -1,19 +1,20 @@
 const Property = require('../models/Property');
 const multer = require('multer');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid'); // Add this line at the top of your file
+const { v4: uuidv4 } = require('uuid');
+
 // Set up Multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = uuidv4(); // Generate a unique identifier
-    cb(null, uniqueSuffix + path.extname(file.originalname)); // Append the file extension
+    const uniqueSuffix = uuidv4();
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-const upload = multer({ storage: storage }).array('images', 4); // Allow up to 4 images
+const upload = multer({ storage: storage }).array('images', 4);
 
 // Add a new property
 const addProperty = async (req, res) => {
@@ -26,15 +27,25 @@ const addProperty = async (req, res) => {
       address, 
       description, 
       sellerID,
-      availableSlots // Add this to receive time slots
+      availableSlots,
+      pastPrices // Add pastPrices to receive from frontend
     } = req.body;
     
     const images = req.files.map(file => file.path);
     
-    // Parse availableSlots if it comes as a string
+    // Parse availableSlots and pastPrices if they come as strings
     let slots = availableSlots;
+    let prices = pastPrices;
     if (typeof availableSlots === 'string') {
       slots = JSON.parse(availableSlots);
+    }
+    if (typeof pastPrices === 'string') {
+      prices = JSON.parse(pastPrices);
+    }
+
+    // Validate minimum 5 years of price history
+    if (!prices || prices.length < 5) {
+      return res.status(400).json({ message: 'Minimum 5 years of price history required' });
     }
 
     const newProperty = new Property({
@@ -46,8 +57,9 @@ const addProperty = async (req, res) => {
       description,
       sellerID,
       images,
-      owner:sellerID,
-      availableSlots: slots || [] // Add empty array as default if no slots provided
+      owner: sellerID,
+      availableSlots: slots || [],
+      pastPrices: prices // Store past prices
     });
 
     await newProperty.save();
@@ -66,6 +78,7 @@ const getAllProperties = async (req, res) => {
     res.status(500).json({ message: 'Error fetching properties', error: error.message });
   }
 };
+
 // Get a property by ID
 const getPropertyById = async (req, res) => {
   try {
@@ -77,25 +90,60 @@ const getPropertyById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching property', error: error.message });
   }
 };
+
 // Update a property
 const updateProperty = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, type, price, phone, address, description } = req.body;
+    const { 
+      title, 
+      type, 
+      price, 
+      phone, 
+      address, 
+      description,
+      availableSlots,
+      pastPrices // Add pastPrices for updates
+    } = req.body;
 
     const property = await Property.findById(id);
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
 
-    let images = property.images; // Retain existing images
+    let images = property.images;
     if (req.files && req.files.length > 0) {
-      images = req.files.map(file => file.path); // Use new images if uploaded
+      images = req.files.map(file => file.path);
+    }
+
+    // Parse availableSlots and pastPrices if they come as strings
+    let slots = availableSlots;
+    let prices = pastPrices;
+    if (typeof availableSlots === 'string') {
+      slots = JSON.parse(availableSlots);
+    }
+    if (typeof pastPrices === 'string') {
+      prices = JSON.parse(pastPrices);
+    }
+
+    // Validate minimum 5 years of price history if pastPrices is provided
+    if (prices && prices.length < 5) {
+      return res.status(400).json({ message: 'Minimum 5 years of price history required' });
     }
 
     const updatedProperty = await Property.findByIdAndUpdate(
       id,
-      { title, type, price, phone, address, description, images },
+      { 
+        title, 
+        type, 
+        price, 
+        phone, 
+        address, 
+        description, 
+        images,
+        availableSlots: slots || property.availableSlots,
+        pastPrices: prices || property.pastPrices
+      },
       { new: true }
     );
 

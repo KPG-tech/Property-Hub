@@ -15,15 +15,53 @@ import './PricePredictionPage.css'; // Import the CSS file
 function PricePredictionPage() {
     const location = useLocation();
     const [predictionData, setPredictionData] = useState(null);
+    const [propertyPrice, setPropertyPrice] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const { state } = location;
         if (state && state.predictionData) {
+            console.log('Received predictionData:', state.predictionData);
             setPredictionData(state.predictionData);
+
+            // Check if propertyPrice is present
+            if (!state.predictionData.propertyPrice && state.predictionData.propertyId) {
+                // Fetch property price if not included in predictionData
+                fetchPropertyPrice(state.predictionData.propertyId);
+            } else {
+                setPropertyPrice(state.predictionData.propertyPrice);
+            }
+        } else {
+            console.error('No predictionData in location.state');
+            setError('No prediction data available');
         }
     }, [location]);
 
-    if (!predictionData) {
+    const fetchPropertyPrice = async (propertyId) => {
+        try {
+            const response = await fetch(`http://localhost:8070/api/property/${propertyId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch property');
+            }
+            const property = await response.json();
+            console.log('Fetched property:', property);
+            setPropertyPrice(property.price || 0);
+        } catch (err) {
+            console.error('Error fetching property price:', err);
+            setError('Failed to load property price');
+            setPropertyPrice(0);
+        }
+    };
+
+    if (error) {
+        return (
+            <div className="error-container">
+                <p className="error-text">{error}</p>
+            </div>
+        );
+    }
+
+    if (!predictionData || !predictionData.predictions || !predictionData.financialSummary) {
         return (
             <div className="loading-container">
                 <div className="loading-content">
@@ -66,11 +104,36 @@ function PricePredictionPage() {
                         </div>
                         <div className="details-list">
                             {[
-                                { icon: FaMoneyBillWave, label: 'Initial Price', value: `LKR${predictionData.predictions[0].estimatedValue.toLocaleString()}`, color: 'text-green-600' },
-                                { icon: FaCalendar, label: 'Prediction Date', value: '2025-02-15', color: 'text-purple-600' },
-                                { icon: FaMapMarkerAlt, label: 'Location', value: 'Homagama', color: 'text-red-600' },
-                                { icon: FaBuilding, label: 'Property Type', value: 'Land', color: 'text-indigo-600' },
-                                { icon: FaRulerCombined, label: 'Area', value: '10,000 sq ft', color: 'text-orange-600' }
+                                { 
+                                    icon: FaMoneyBillWave, 
+                                    label: 'Current Price', 
+                                    value: `LKR${(propertyPrice || 0).toLocaleString()}`, 
+                                    color: 'text-green-600' 
+                                },
+                                { 
+                                    icon: FaCalendar, 
+                                    label: 'Prediction Date', 
+                                    value: predictionData.date || '2025-05-06', 
+                                    color: 'text-purple-600' 
+                                },
+                                { 
+                                    icon: FaMapMarkerAlt, 
+                                    label: 'Location', 
+                                    value: predictionData.location || 'Unknown', 
+                                    color: 'text-red-600' 
+                                },
+                                { 
+                                    icon: FaBuilding, 
+                                    label: 'Property Type', 
+                                    value: predictionData.propertyType || 'Unknown', 
+                                    color: 'text-indigo-600' 
+                                },
+                                { 
+                                    icon: FaRulerCombined, 
+                                    label: 'Area', 
+                                    value: predictionData.areaSqFt ? `${predictionData.areaSqFt} sq ft` : 'Unknown', 
+                                    color: 'text-orange-600' 
+                                }
                             ].map((item, index) => (
                                 <div key={index} className="details-item">
                                     <item.icon className={`item-icon ${item.color}`} />
@@ -99,13 +162,13 @@ function PricePredictionPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {predictionData.predictions.map((prediction, index) => (
+                                    {(predictionData.predictions || []).map((prediction, index) => (
                                         <tr key={index} className={`table-row ${getValueColor(index)}`}>
                                             <td className="table-cell font-semibold">{prediction.year}</td>
-                                            <td className="table-cell font-bold">LKR{prediction.estimatedValue.toLocaleString()}</td>
+                                            <td className="table-cell font-bold">LKR{(prediction.estimatedValue || 0).toLocaleString()}</td>
                                             <td className="table-cell">
                                                 <div className="confidence-bar-bg">
-                                                    <div className="confidence-bar" style={{ width: `${prediction.confidenceScore}%` }}></div>
+                                                    <div className="confidence-bar" style={{ width: `${prediction.confidenceScore || 0}%` }}></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -130,7 +193,7 @@ function PricePredictionPage() {
                                 Benefits
                             </h3>
                             <ul className="summary-list">
-                                {predictionData.financialSummary.benefits.map((benefit, index) => (
+                                {(predictionData.financialSummary.benefits || []).map((benefit, index) => (
                                     <li key={index} className="summary-item green-item">{benefit}</li>
                                 ))}
                             </ul>
@@ -143,7 +206,7 @@ function PricePredictionPage() {
                                 Risks
                             </h3>
                             <ul className="summary-list">
-                                {predictionData.financialSummary.risks.map((risk, index) => (
+                                {(predictionData.financialSummary.risks || []).map((risk, index) => (
                                     <li key={index} className="summary-item red-item">{risk}</li>
                                 ))}
                             </ul>
