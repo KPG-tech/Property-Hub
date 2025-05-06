@@ -13,9 +13,15 @@ function AddProperty() {
     address: '',
     description: '',
     sellerID: '',
+    pastPrices: {
+      year1: '',
+      year2: '',
+      year3: '',
+      year4: '',
+      year5: '',
+    }
   });
   
-  // Add state for time slots
   const [timeSlots, setTimeSlots] = useState([]);
   const [newSlot, setNewSlot] = useState({
     date: '',
@@ -48,10 +54,21 @@ function AddProperty() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name.startsWith('pastPrice')) {
+      const yearKey = `year${name.split('-')[1]}`;
+      setFormData({
+        ...formData,
+        pastPrices: {
+          ...formData.pastPrices,
+          [yearKey]: value
+        }
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  // Handle time slot changes
   const handleSlotChange = (e) => {
     setNewSlot({ ...newSlot, [e.target.name]: e.target.value });
   };
@@ -80,7 +97,8 @@ function AddProperty() {
     data.append('address', formData.address);
     data.append('description', formData.description);
     data.append('sellerID', formData.sellerID);
-    data.append('availableSlots', JSON.stringify(timeSlots)); // Add time slots
+    data.append('availableSlots', JSON.stringify(timeSlots));
+    data.append('pastPrices', JSON.stringify(formData.pastPrices));
     images.forEach((image) => {
       data.append('images', image.file);
     });
@@ -103,6 +121,13 @@ function AddProperty() {
           address: '',
           description: '',
           sellerID: '',
+          pastPrices: {
+            year1: '',
+            year2: '',
+            year3: '',
+            year4: '',
+            year5: '',
+          }
         });
         setImages([]);
         setTimeSlots([]);
@@ -136,9 +161,29 @@ function AddProperty() {
           </div>
 
           <div className='auth_card_from_input'>
-            <label className='auth_card_lable'>Price</label>
+            <label className='auth_card_lable'>Current Price</label>
             <input className='auth_card_input' type="number" name="price"
-              placeholder='Enter price' required value={formData.price} onChange={handleChange} />
+              placeholder='Enter current price' required value={formData.price} onChange={handleChange} />
+          </div>
+
+          <div className='auth_card_from_input'>
+            <label className='auth_card_lable'>Past 5 Years Prices</label>
+            <div className='past-prices-container'>
+              {[1, 2, 3, 4, 5].map((year) => (
+                <div key={year} className='past-price-input'>
+                  <label className='auth_card_lable'>{`Year ${year} ago`}</label>
+                  <input
+                    className='auth_card_input'
+                    type="number"
+                    name={`pastPrice-${year}`}
+                    placeholder={`Price ${year} year${year > 1 ? 's' : ''} ago`}
+                    value={formData.pastPrices[`year${year}`]}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className='auth_card_from_input'>
@@ -146,7 +191,8 @@ function AddProperty() {
             <input className='auth_card_input'
               type="text"
               name="phone"
-              placeholder='Enter phone number' required 
+              placeholder='Enter phone number'
+              required 
               value={formData.phone}
               onChange={(e) => {
                 const re = /^[0-9\b]{0,10}$/;
@@ -157,7 +203,7 @@ function AddProperty() {
               maxLength="10"
               pattern="[0-9]{10}"
               title="Please enter exactly 10 digits."
-               />
+            />
           </div>
 
           <div className='auth_card_from_input'>
@@ -216,14 +262,13 @@ function AddProperty() {
                 name="endTime"
                 value={newSlot.endTime}
                 onChange={handleSlotChange}
-                className='auth_card_input'
+  className='auth_card_input'
               />
               <button type="button" className="from_btn" onClick={addTimeSlot}>
                 Add Slot
               </button>
             </div>
             
-            {/* Display added time slots */}
             <div className="time-slots-list">
               {timeSlots.map((slot, index) => (
                 <div key={index} className="time-slot-item">
