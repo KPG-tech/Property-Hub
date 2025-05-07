@@ -9,8 +9,8 @@ exports.predict = async (req, res) => {
         const { propertyId, date, location, propertyType, areaSqFt, bedrooms, bathrooms, nearbyInfrastructure } = req.body;
 
         // Validate required fields
-        if (!propertyId || !date || !location || !propertyType) {
-            return res.status(400).json({ message: "Missing required fields: propertyId, date, location, or propertyType." });
+        if (!propertyId ) {
+            return res.status(400).json({ message: "Missing required field: propertyId." });
         }
 
         // Fetch property to get pastPrices
@@ -32,7 +32,7 @@ exports.predict = async (req, res) => {
 
         Property Details:
         - Historical Prices (LKR, past 5 years): 
-            ${pastPrices.map((p, i) => `Year ${new Date().getFullYear() - 5 + i}: ${p}`).join('\n            ')}
+            ${pastPrices.map((p) => `${p.year} year${p.year > 1 ? 's' : ''} ago: ${p.price}`).join('\n            ')}
         - Date of Analysis: ${date}
         - Location: ${location}
         - Property Type: ${propertyType}
@@ -58,7 +58,7 @@ exports.predict = async (req, res) => {
         5. Provide a summary of potential financial benefits and risks.
         6. Offer visualization suggestions for the frontend (e.g., line graphs for value and rental income, bar charts for ROI).
         7. Give a confidence score for each prediction.
-        8. Predict if there will be any significant impact on the property value due to environmental factors, like flood risk, sea level rise, or other natural disasters.
+        8. Predict if there there will be any significant impact on the property value due to environmental factors, like flood risk, sea level rise, or other natural disasters.
         9. Predict any changes in the location's demography that might impact value.
         10. Predict any changes in local tax or regulations that might impact the investment.
 

@@ -15,6 +15,21 @@ const BookingManagement = () => {
   const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
+  // Helper function to get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // e.g., "2025-05-07"
+  };
+
+  // Helper function to check if a date is in the future or today
+  const isFutureDate = (date) => {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
+    selectedDate.setHours(0, 0, 0, 0);
+    return selectedDate >= today;
+  };
+
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -93,6 +108,10 @@ const BookingManagement = () => {
 
   const handleAddSlot = async (e) => {
     e.preventDefault();
+    if (!isFutureDate(newSlot.date)) {
+      alert('Please select a future date or today for the booking slot.');
+      return;
+    }
     try {
       const response = await axios.post(`http://localhost:8070/propertyBooking/properties/${newSlot.propertyId}/slots`, {
         date: newSlot.date,
@@ -118,6 +137,10 @@ const BookingManagement = () => {
 
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
+    if (!isFutureDate(editSlot.date)) {
+      alert('Please select a future date or today for the booking slot.');
+      return;
+    }
     try {
       const response = await axios.put(`http://localhost:8070/propertyBooking/properties/${editSlot.propertyId}/slots/${editSlot._id}`, {
         date: editSlot.date,
@@ -193,6 +216,7 @@ const BookingManagement = () => {
                 type="date"
                 value={newSlot.date}
                 onChange={(e) => setNewSlot({ ...newSlot, date: e.target.value })}
+                min={getTodayDate()}
                 className="p-2 border border-gray-300 rounded bg-white text-gray-700"
                 required
             />
@@ -212,7 +236,7 @@ const BookingManagement = () => {
             />
             <button
                 type="submit"
-                className="col-span-1 md:col-span-4 bg-gray-600 text-gray-200 p-2 rounded hover:bg-gray-700 flex items-center justify-center"
+                className="col-span-1 md:col-span  md:col-span-4 bg-gray-600 text-gray-200 p-2 rounded hover:bg-gray-700 flex items-center justify-center"
             >
               <FaPlus className="mr-2" /> Add Slot
             </button>
@@ -227,6 +251,7 @@ const BookingManagement = () => {
                     type="date"
                     value={editSlot.date}
                     onChange={(e) => setEditSlot({ ...editSlot, date: e.target.value })}
+                    min={getTodayDate()}
                     className="p-2 border border-gray-300 rounded bg-white text-gray-700"
                     required
                 />

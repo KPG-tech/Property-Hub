@@ -18,6 +18,10 @@ const propertySchema = new Schema({
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     isBooked: { type: Boolean, default: false }
+  }],
+  pastPrices: [{
+    year: { type: Number, required: true }, // e.g., 1, 2, 3, 4, 5 (representing years ago)
+    price: { type: Number, required: true } // Price for that year
   }]
 });
 

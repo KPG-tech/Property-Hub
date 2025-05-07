@@ -63,6 +63,7 @@ function PropertyPage() {
     setPredictionLoading(prev => ({ ...prev, [property._id]: true }));
     try {
       const requestBody = {
+        propertyId: property._id,
         price: property.price,
         date: new Date().toISOString().split('T')[0],
         location: property.address,

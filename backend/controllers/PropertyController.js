@@ -19,20 +19,20 @@ const upload = multer({ storage: storage }).array('images', 4);
 // Add a new property
 const addProperty = async (req, res) => {
   try {
-    const { 
-      title, 
-      type, 
-      price, 
-      phone, 
-      address, 
-      description, 
+    const {
+      title,
+      type,
+      price,
+      phone,
+      address,
+      description,
       sellerID,
       availableSlots,
       pastPrices // Add pastPrices to receive from frontend
     } = req.body;
-    
+
     const images = req.files.map(file => file.path);
-    
+
     // Parse availableSlots and pastPrices if they come as strings
     let slots = availableSlots;
     let prices = pastPrices;
@@ -43,9 +43,21 @@ const addProperty = async (req, res) => {
       prices = JSON.parse(pastPrices);
     }
 
+    // Convert pastPrices object to array of { year, price } objects
+    const pastPricesArray = prices ? Object.keys(prices).map((key, index) => ({
+      year: index + 1, // e.g., year1 -> 1, year2 -> 2, etc.
+      price: parseFloat(prices[key]) // Convert price to number
+    })) : [];
+
     // Validate minimum 5 years of price history
-    if (!prices || prices.length < 5) {
+    if (!pastPricesArray || pastPricesArray.length < 5) {
       return res.status(400).json({ message: 'Minimum 5 years of price history required' });
+    }
+
+    // Validate that all prices are valid numbers
+    const invalidPrice = pastPricesArray.some(entry => isNaN(entry.price) || entry.price <= 0);
+    if (invalidPrice) {
+      return res.status(400).json({ message: 'All past prices must be valid positive numbers' });
     }
 
     const newProperty = new Property({
@@ -59,7 +71,7 @@ const addProperty = async (req, res) => {
       images,
       owner: sellerID,
       availableSlots: slots || [],
-      pastPrices: prices // Store past prices
+      pastPrices: pastPricesArray // Store past prices as array
     });
 
     await newProperty.save();
