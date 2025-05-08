@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import banks from "../../../data/banks.json";
-import branches from "../../../data/branches.json";
-
 import "./payment.css";
 
 function BankSlipUploadPage() {
@@ -10,8 +7,8 @@ function BankSlipUploadPage() {
   const [bankName, setBankName] = useState("");
   const [bankBranch, setBankBranch] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
+  const [amount, setAmount] = useState("");  // New state for amount
   const [message, setMessage] = useState("");
-  const [filteredBranches, setFilteredBranches] = useState([]);
 
   const handleBankSlipUpload = (e) => {
     const file = e.target.files[0];
@@ -21,39 +18,43 @@ function BankSlipUploadPage() {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (!bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
+    // Validation for form fields
+    if (!bankHolder || !bankName || !bankBranch || !paymentDate || !amount || !bankSlip) {
       setMessage("❌ Please fill in all fields and upload a bank slip.");
       return;
     }
 
-    const today = new Date().toISOString().split("T")[0];
-    if (paymentDate > today) {
-      setMessage("❌ Payment date cannot be in the future.");
-      return;
+    const formData = new FormData();
+    formData.append("userId", "12345"); // Replace with actual userId
+    formData.append("bankHolder", bankHolder);
+    formData.append("bankName", bankName);
+    formData.append("bankBranch", bankBranch);
+    formData.append("paymentDate", paymentDate);
+    formData.append("amount", amount);  // Append the amount field
+    formData.append("bankSlip", bankSlip); // Append the uploaded bank slip
+
+    try {
+      const response = await fetch("http://localhost:8070/api/payment/upload-bank-slip", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMessage("✅ Bank slip uploaded and details saved successfully!");
+      } else {
+        setMessage("❌ Error uploading bank slip. Please try again.");
+      }
+    } catch (error) {
+      setMessage("❌ Error uploading data. Please try again.");
     }
-
-    setMessage("✅ Bank details and slip submitted successfully!");
-    // Here you can send the form data to your server
   };
 
+  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
-
-  // Sort the banks by name alphabetically
-  const sortedBanks = banks.sort((a, b) => a.name.localeCompare(b.name));
-
-  const handleBankNameChange = (e) => {
-    const selectedBankID = e.target.value;
-    setBankName(selectedBankID);
-    
-    // Get the branches for the selected bank and sort alphabetically
-    const filtered = branches[selectedBankID] || [];
-    const sortedBranches = filtered.sort((a, b) => a.name.localeCompare(b.name));
-    setFilteredBranches(sortedBranches);
-    setBankBranch(""); // Reset branch when bank changes
-  };
 
   return (
     <div className="payment-container">
@@ -72,35 +73,24 @@ function BankSlipUploadPage() {
 
         <div className="input-group">
           <label htmlFor="bankName">Bank Name</label>
-          <select
+          <input
             id="bankName"
+            type="text"
             value={bankName}
-            onChange={handleBankNameChange}
-          >
-            <option value="">-- Select a Bank --</option>
-            {sortedBanks.map((bank) => (
-              <option key={bank.ID} value={bank.ID}>
-                {bank.name}
-              </option>
-            ))}
-          </select>
+            onChange={(e) => setBankName(e.target.value)}
+            placeholder="Enter bank name"
+          />
         </div>
 
         <div className="input-group">
           <label htmlFor="bankBranch">Bank Branch</label>
-          <select
+          <input
             id="bankBranch"
+            type="text"
             value={bankBranch}
             onChange={(e) => setBankBranch(e.target.value)}
-            disabled={!filteredBranches.length}
-          >
-            <option value="">-- Select a Branch --</option>
-            {filteredBranches.map((branch) => (
-              <option key={branch.ID} value={branch.name}>
-                {branch.name}
-              </option>
-            ))}
-          </select>
+            placeholder="Enter bank branch"
+          />
         </div>
 
         <div className="input-group">
@@ -110,7 +100,20 @@ function BankSlipUploadPage() {
             type="date"
             value={paymentDate}
             onChange={(e) => setPaymentDate(e.target.value)}
-            max={today}
+            max={today} // Disable future dates
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="amount">Amount</label>  {/* New input field for amount */}
+          <input
+            id="amount"
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter payment amount"
+            min="0"
+            step="0.01"
           />
         </div>
 
