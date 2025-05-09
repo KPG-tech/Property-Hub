@@ -103,6 +103,8 @@ function Payment() {
     setAmount(value);
   };
 
+  
+
   return (
     <div className="payment-container">
       <h1 className="payment-heading">Payment</h1>

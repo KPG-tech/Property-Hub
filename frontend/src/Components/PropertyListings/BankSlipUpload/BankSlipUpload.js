@@ -27,15 +27,7 @@ function BankSlipUploadPage() {
     const selectedBankID = e.target.value;
     setBankName(selectedBankID);
 
-    // DEBUG: Log selected bank ID and available branch keys
-    console.log("Selected Bank ID:", selectedBankID);
-    console.log("Branch keys in JSON:", Object.keys(branches));
-
-    // Convert to string to match keys in branches.json
     const filtered = branches[selectedBankID.toString()] || [];
-
-    console.log("Filtered branches for selected bank:", filtered);
-
     const sortedBranches = [...filtered].sort((a, b) =>
       a.name.localeCompare(b.name)
     );
@@ -43,7 +35,7 @@ function BankSlipUploadPage() {
     setBankBranch("");
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     if (!bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
@@ -56,8 +48,38 @@ function BankSlipUploadPage() {
       return;
     }
 
-    setMessage("✅ Bank details and slip submitted successfully!");
-    // Submission logic here
+    const formData = new FormData();
+    formData.append("bankHolder", bankHolder);
+    formData.append("bankName", bankName);
+    formData.append("bankBranch", bankBranch);
+    formData.append("paymentDate", paymentDate);
+    formData.append("bankSlip", bankSlip);
+    formData.append("paymentMethod", "Bank Transfer");
+
+    try {
+      const res = await fetch("http://localhost:8070/api/payment/bank-transfer", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage("✅ Bank details and slip submitted successfully!");
+        // Optionally reset form
+        setBankHolder("");
+        setBankName("");
+        setBankBranch("");
+        setPaymentDate("");
+        setBankSlip(null);
+        setFilteredBranches([]);
+      } else {
+        setMessage("❌ Submission failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("❌ Server error. Please try again later.");
+    }
   };
 
   return (

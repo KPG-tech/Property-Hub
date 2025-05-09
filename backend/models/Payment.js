@@ -7,24 +7,30 @@ const PaymentSchema = new mongoose.Schema({
     required: true,
   },
 
-  // Card payment info (optional)
-  cardNumber: { type: String },
-  expiry: { type: String },
-  cvv: { type: String },
-
-  // Bank transfer info (optional)
-  bankHolder: { type: String },
-  bankName: { type: String },
-  bankBranch: { type: String },
-  bankSlip: { type: String }, // File path or public URL
-
-  // General payment info
-  amount: { type: Number, required: true },
+  // Payment method
   paymentMethod: {
     type: String,
     enum: ["Card", "Bank Transfer"],
     required: true,
   },
+
+  // Card payment info (only if paymentMethod === "Card")
+  cardDetails: {
+    cardNumber: { type: String },
+    expiry: { type: String },
+    cvv: { type: String },
+  },
+
+  // Bank transfer info (only if paymentMethod === "Bank Transfer")
+  bankTransferDetails: {
+    bankHolder: { type: String },
+    bankName: { type: String },
+    bankBranch: { type: String },
+    bankSlipUrl: { type: String }, // stored file path or public URL
+  },
+
+  // Common fields
+  amount: { type: Number, required: true },
   paymentDate: {
     type: Date,
     default: Date.now,

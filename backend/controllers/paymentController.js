@@ -13,14 +13,16 @@ exports.processCardPayment = async (req, res) => {
       userId,
       cardNumber: "**** **** **** " + cardNumber.slice(-4),
       expiry,
+      cvv,
       amount,
       paymentMethod: "Card",
       status: "Pending",
     });
 
     await payment.save();
-    res.json({ success: true, message: "Payment recorded", payment });
+    res.json({ success: true, message: "Card payment recorded", payment });
   } catch (error) {
+    console.error("Card payment error:", error);
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
@@ -29,9 +31,9 @@ exports.processCardPayment = async (req, res) => {
 exports.uploadBankSlip = async (req, res) => {
   try {
     const { userId, bankHolder, bankName, bankBranch, paymentDate, amount } = req.body;
-    const bankSlip = req.file ? req.file.path : null;
+    const bankSlip = req.file ? req.file.filename : null;
 
-    if (!userId || !bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
+    if (!userId || !bankHolder || !bankName || !bankBranch || !amount || !bankSlip) {
       return res.status(400).json({ success: false, message: "Missing fields" });
     }
 
@@ -40,9 +42,9 @@ exports.uploadBankSlip = async (req, res) => {
       bankHolder,
       bankName,
       bankBranch,
-      paymentDate,
-      amount,
       bankSlip,
+      amount,
+      paymentDate: paymentDate || Date.now(),
       paymentMethod: "Bank Transfer",
       status: "Pending",
     });
@@ -50,19 +52,21 @@ exports.uploadBankSlip = async (req, res) => {
     await payment.save();
     res.json({ success: true, message: "Bank slip uploaded", payment });
   } catch (error) {
+    console.error("Bank slip upload error:", error);
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
 
-// 📜 Fetch All Payments (with user name)
+// 📜 Fetch All Payments (for Admin)
 exports.getPayments = async (req, res) => {
   try {
     const payments = await Payment.find()
-      .populate("userId", "name") // 👈 this is the important change
+      .populate("userId", "name")
       .sort({ createdAt: -1 });
 
     res.json({ success: true, payments });
   } catch (error) {
+    console.error("Fetching payments error:", error);
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
@@ -83,6 +87,7 @@ exports.updatePaymentStatus = async (req, res) => {
 
     res.json({ success: true, message: `Payment ${status}`, payment });
   } catch (error) {
+    console.error("Update status error:", error);
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };

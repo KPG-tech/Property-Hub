@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./PaymentAdmin.css"
+import "./PaymentAdmin.css";
 
-// API functions
+// API base URL
 const API_BASE_URL = "http://localhost:8070/api/payment";
 
 const fetchPayments = async () => {
@@ -74,23 +74,29 @@ function PaymentAdmin() {
             <tbody>
               {payments.map((payment) => (
                 <tr key={payment._id} className="border-t">
-                  <td className="px-4 py-2">{payment.userId}</td>
+                  <td className="px-4 py-2">{payment.userId?.name || "-"}</td>
                   <td className="px-4 py-2">{payment.paymentMethod}</td>
                   <td className="px-4 py-2">${payment.amount.toFixed(2)}</td>
-                  <td className={`px-4 py-2 font-semibold ${
-                    payment.status === "Approved" ? "text-green-600" :
-                    payment.status === "Cancelled" ? "text-red-600" :
-                    "text-yellow-600"
-                  }`}>
+                  <td
+                    className={`px-4 py-2 font-semibold ${
+                      payment.status === "Approved"
+                        ? "text-green-600"
+                        : payment.status === "Cancelled"
+                        ? "text-red-600"
+                        : "text-yellow-600"
+                    }`}
+                  >
                     {payment.status}
                   </td>
-                  <td className="px-4 py-2">{new Date(payment.date).toLocaleDateString()}</td>
-                  <td className="px-4 py-2">{payment.bankName || "-"}</td>
-                  <td className="px-4 py-2">{payment.branch || "-"}</td>
                   <td className="px-4 py-2">
-                    {payment.paymentMethod === "BankSlip" && payment.slipUrl ? (
+                    {new Date(payment.paymentDate || payment.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-2">{payment.bankName || "-"}</td>
+                  <td className="px-4 py-2">{payment.bankBranch || "-"}</td>
+                  <td className="px-4 py-2">
+                    {payment.paymentMethod === "Bank Transfer" && payment.bankSlip ? (
                       <a
-                        href={payment.slipUrl}
+                        href={`http://localhost:8070/${payment.bankSlip.replace(/\\/g, "/")}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
