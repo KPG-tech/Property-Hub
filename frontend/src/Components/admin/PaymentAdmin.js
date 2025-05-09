@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PaymentAdmin.css";
+import { jsPDF } from "jspdf";
 
 // API base URL
 const API_BASE_URL = "http://localhost:8070/api/payment";
@@ -47,11 +48,57 @@ function PaymentAdmin() {
     }
   };
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(12);
+    doc.text("Payment List", 20, 20);
+
+    // Table Headers
+    doc.setFillColor(0, 123, 255); // Set header background color (blue)
+    doc.rect(20, 30, 180, 10, "F"); // Background color for the header row
+    doc.setTextColor(255, 255, 255); // Set text color to white
+    doc.text("Method", 20, 35);
+    doc.text("Amount", 60, 35);
+    doc.text("Status", 100, 35);
+    doc.text("Date", 140, 35);
+    doc.text("Bank", 180, 35);
+    doc.text("Branch", 220, 35);
+
+    let y = 45; // Starting y-position for table rows
+
+    payments.forEach((payment) => {
+      doc.setTextColor(0, 0, 0); // Set text color to black for rows
+
+      doc.text(payment.paymentMethod || "-", 20, y);
+      doc.text(`$${payment.amount.toFixed(2)}`, 60, y);
+      doc.text(payment.status, 100, y);
+      doc.text(new Date(payment.paymentDate || payment.createdAt).toLocaleDateString(), 140, y);
+      doc.text(payment.bankName || "-", 180, y);
+      doc.text(payment.bankBranch || "-", 220, y);
+
+      y += 10; // Add space between rows
+
+      if (y > 250) {
+        doc.addPage();
+        y = 20; // Reset y-position for the new page
+      }
+    });
+
+    doc.save("payments.pdf");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Admin Payments</h1>
 
       {message && <p className="text-center text-lg text-green-600 mb-4">{message}</p>}
+
+      <button
+        onClick={generatePDF}
+        className="generate-pdf-btn mb-4"
+      >
+        Generate PDF
+      </button>
 
       {loading ? (
         <p className="text-center">Loading payments...</p>
