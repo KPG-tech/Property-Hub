@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import banks from "../../../data/banks.json";
 import branches from "../../../data/branches.json";
-import "./payment.css";
+import "./BankSlipUpload.css";
 
 function BankSlipUploadPage() {
   const [bankSlip, setBankSlip] = useState(null);
