@@ -143,7 +143,7 @@ function Payment() {
         <input
           id="amount"
           type="text"
-          placeholder="100.00"
+          placeholder="0.00"
           value={amount}
           onChange={handleAmountChange}
         />
