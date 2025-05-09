@@ -15,6 +15,10 @@ function BankSlipUploadPage() {
   const today = new Date().toISOString().split("T")[0];
   const sortedBanks = [...banks].sort((a, b) => a.name.localeCompare(b.name));
 
+  // Placeholder for `userId` and `amount` (update with actual logic)
+  const userId = "12345"; // Example user ID, replace with actual
+  const amount = "1000";  // Example amount, replace with actual
+
   const handleBankSlipUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -38,6 +42,7 @@ function BankSlipUploadPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate form inputs
     if (!bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
       setMessage("❌ Please fill in all fields and upload a bank slip.");
       return;
@@ -48,7 +53,10 @@ function BankSlipUploadPage() {
       return;
     }
 
+    // Prepare the form data
     const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("amount", amount);
     formData.append("bankHolder", bankHolder);
     formData.append("bankName", bankName);
     formData.append("bankBranch", bankBranch);
@@ -56,6 +64,7 @@ function BankSlipUploadPage() {
     formData.append("bankSlip", bankSlip);
     formData.append("paymentMethod", "Bank Transfer");
 
+    // Send form data to backend
     try {
       const res = await fetch("http://localhost:8070/api/payment/bank-transfer", {
         method: "POST",

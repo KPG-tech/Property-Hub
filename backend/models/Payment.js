@@ -1,45 +1,18 @@
 const mongoose = require("mongoose");
 
 const PaymentSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-
-  // Payment method
-  paymentMethod: {
-    type: String,
-    enum: ["Card", "Bank Transfer"],
-    required: true,
-  },
-
-  // Card payment info (only if paymentMethod === "Card")
-  cardDetails: {
-    cardNumber: { type: String },
-    expiry: { type: String },
-    cvv: { type: String },
-  },
-
-  // Bank transfer info (only if paymentMethod === "Bank Transfer")
-  bankTransferDetails: {
-    bankHolder: { type: String },
-    bankName: { type: String },
-    bankBranch: { type: String },
-    bankSlipUrl: { type: String }, // stored file path or public URL
-  },
-
-  // Common fields
+  userId: { type: String, required: true },
+  cardNumber: { type: String, required: false }, // Masked for security
+  expiry: { type: String, required: false },
+  cvv: { type: String, required: false },
   amount: { type: Number, required: true },
-  paymentDate: {
-    type: Date,
-    default: Date.now,
-  },
-  status: {
-    type: String,
-    enum: ["Pending", "Approved", "Cancelled"],
-    default: "Pending",
-  },
+  bankHolder: { type: String, required: false },
+  bankName: { type: String, required: false },
+  bankBranch: { type: String, required: false },
+  paymentDate: { type: Date, required: false },
+  bankSlip: { type: String, required: false }, // Store file path or URL
+  paymentMethod: { type: String, enum: ["Card", "Bank Transfer"], required: true },
+  status: { type: String, enum: ["Pending", "Approved", "Cancelled"], default: "Pending" },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Payment", PaymentSchema);
