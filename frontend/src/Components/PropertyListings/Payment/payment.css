@@ -42,8 +42,7 @@
   font-weight: bold;
 }
 
-.input-group input,
-.input-group select {
+.input-group input {
   padding: 14px;
   font-size: 16px;
   border-radius: 10px;
@@ -52,8 +51,7 @@
   box-sizing: border-box;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+.input-group input:focus {
   outline: none;
   border-color: #4CAF50;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
@@ -68,7 +66,7 @@
 button {
   width: 100%;
   padding: 16px;
-  background-color: #4CAF50;
+  background-color: #1d13d8;
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,7 +76,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #0404e8;
   transform: scale(1.02);
 }
 

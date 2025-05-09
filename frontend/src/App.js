@@ -7,7 +7,7 @@ import SellerUpdateProperty from "./Components/PropertyListings/Seller/PropertyU
 import SellerPropertyDetails from "./Components/PropertyListings/Seller/PropertyDetails/PropertyDetails";
 import PropertyPage from "./Components/PropertyListings/User/PropertyPage/PropertyPage";
 import Payment from "./Components/PropertyListings/Payment/payment";
-import BankSlipUploadPage from "./Components/PropertyListings/Payment/BankSlipUpload";
+import BankSlipUploadPage from "./Components/PropertyListings/BankSlipUpload/BankSlipUpload";
 import AdminPayments from "./Components/admin/PaymentAdmin";
 
 
