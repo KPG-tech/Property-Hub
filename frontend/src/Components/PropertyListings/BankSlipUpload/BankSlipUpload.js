@@ -27,13 +27,13 @@ function BankSlipUploadPage() {
     const selectedBankID = e.target.value;
     setBankName(selectedBankID);
 
-    // Convert to string key to match JSON structure
-    const filtered = branches[selectedBankID] || [];
+    // Convert to string key for JSON lookup
+    const filtered = branches[selectedBankID.toString()] || [];
     const sortedBranches = [...filtered].sort((a, b) =>
       a.name.localeCompare(b.name)
     );
     setFilteredBranches(sortedBranches);
-    setBankBranch(""); // reset previous branch
+    setBankBranch("");
   };
 
   const handleFormSubmit = (e) => {
@@ -50,7 +50,7 @@ function BankSlipUploadPage() {
     }
 
     setMessage("✅ Bank details and slip submitted successfully!");
-    // Submit to server logic goes here
+    // Submit logic goes here
   };
 
   return (
@@ -77,7 +77,7 @@ function BankSlipUploadPage() {
           >
             <option value="">-- Select a Bank --</option>
             {sortedBanks.map((bank) => (
-              <option key={bank.ID} value={bank.ID}>
+              <option key={bank.ID} value={bank.ID.toString()}>
                 {bank.name}
               </option>
             ))}
