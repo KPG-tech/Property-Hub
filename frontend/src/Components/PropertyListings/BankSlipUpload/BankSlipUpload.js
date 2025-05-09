@@ -38,7 +38,6 @@ function BankSlipUploadPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation checks
     if (!bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
       setMessage("❌ Please fill in all fields and upload a bank slip.");
       return;
@@ -49,7 +48,6 @@ function BankSlipUploadPage() {
       return;
     }
 
-    // Prepare FormData
     const formData = new FormData();
     formData.append("bankHolder", bankHolder);
     formData.append("bankName", bankName);
@@ -57,9 +55,6 @@ function BankSlipUploadPage() {
     formData.append("paymentDate", paymentDate);
     formData.append("bankSlip", bankSlip);
     formData.append("paymentMethod", "Bank Transfer");
-
-    // Check the formData before sending
-    console.log("Sending form data", formData);
 
     try {
       const res = await fetch("http://localhost:8070/api/payment/bank-transfer", {
@@ -69,7 +64,6 @@ function BankSlipUploadPage() {
 
       const data = await res.json();
 
-      // Handle response
       if (data.success) {
         setMessage("✅ Bank details and slip submitted successfully!");
         // Optionally reset form
