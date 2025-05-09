@@ -103,6 +103,26 @@
   transition: background-color 0.3s ease;
 }
 
+.or-text {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #7f8c8d;
+}
+/* Button outside the form */
 .secondary-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #2980b9;
+  color: #fff;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+  margin-top: 16px; /* Optional: Adjust spacing */
+}
+
+.upload-bank-slip-btn:hover {
+  background-color: #1f6391;
 }

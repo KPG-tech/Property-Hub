@@ -5,14 +5,13 @@ exports.processCardPayment = async (req, res) => {
   try {
     const { userId, cardNumber, expiry, cvv, amount } = req.body;
 
-    // Simulate payment processing (Replace with real payment gateway)
     if (!userId || !cardNumber || !expiry || !cvv || !amount) {
       return res.status(400).json({ success: false, message: "Missing fields" });
     }
 
     const payment = new Payment({
       userId,
-      cardNumber: "**** **** **** " + cardNumber.slice(-4), // Mask card number
+      cardNumber: "**** **** **** " + cardNumber.slice(-4),
       expiry,
       amount,
       paymentMethod: "Card",
@@ -27,13 +26,10 @@ exports.processCardPayment = async (req, res) => {
 };
 
 // 📤 Upload Bank Slip
-const upload = require("./multer"); // Import multer configuration
-
-// 📤 Upload Bank Slip
 exports.uploadBankSlip = async (req, res) => {
   try {
     const { userId, bankHolder, bankName, bankBranch, paymentDate, amount } = req.body;
-    const bankSlip = req.file ? req.file.path : null; // Store file path
+    const bankSlip = req.file ? req.file.path : null;
 
     if (!userId || !bankHolder || !bankName || !bankBranch || !paymentDate || !bankSlip) {
       return res.status(400).json({ success: false, message: "Missing fields" });
@@ -46,7 +42,7 @@ exports.uploadBankSlip = async (req, res) => {
       bankBranch,
       paymentDate,
       amount,
-      bankSlip, // Store file path in the database
+      bankSlip,
       paymentMethod: "Bank Transfer",
       status: "Pending",
     });
@@ -58,11 +54,13 @@ exports.uploadBankSlip = async (req, res) => {
   }
 };
 
-
-// 📜 Fetch All Payments
+// 📜 Fetch All Payments (with user name)
 exports.getPayments = async (req, res) => {
   try {
-    const payments = await Payment.find().sort({ createdAt: -1 });
+    const payments = await Payment.find()
+      .populate("userId", "name") // 👈 this is the important change
+      .sort({ createdAt: -1 });
+
     res.json({ success: true, payments });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error", error });

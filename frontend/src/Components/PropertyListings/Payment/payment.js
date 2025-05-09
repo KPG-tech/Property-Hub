@@ -151,12 +151,16 @@ function Payment() {
         <button onClick={handlePayment}>Pay Now</button>
         {message && <p className="message">{message}</p>}
 
-        <p className="or-text">OR</p>
+      
+       
+      </div>
+
+
+       <p className="or-text">OR</p>
 
         <button className="secondary-btn" onClick={() => navigate("/upload-slip")}>
           Upload Bank Slip Instead
         </button>
-      </div>
     </div>
   );
 }

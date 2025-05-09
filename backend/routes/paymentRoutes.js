@@ -17,7 +17,7 @@ router.post("/pay", processCardPayment);
 // 📤 Upload Bank Slip Route
 router.post("/upload-bank-slip", upload.single("bankSlip"), uploadBankSlip);
 
-// 📜 Get All Payments Route
+// 📜 Get All Payments Route (with populated user info)
 router.get("/", getPayments);
 
 // ✅ Approve or ❌ Cancel Payment
