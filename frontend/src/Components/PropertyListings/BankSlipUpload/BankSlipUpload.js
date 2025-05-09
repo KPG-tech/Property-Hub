@@ -27,8 +27,15 @@ function BankSlipUploadPage() {
     const selectedBankID = e.target.value;
     setBankName(selectedBankID);
 
-    // Convert to string key for JSON lookup
+    // DEBUG: Log selected bank ID and available branch keys
+    console.log("Selected Bank ID:", selectedBankID);
+    console.log("Branch keys in JSON:", Object.keys(branches));
+
+    // Convert to string to match keys in branches.json
     const filtered = branches[selectedBankID.toString()] || [];
+
+    console.log("Filtered branches for selected bank:", filtered);
+
     const sortedBranches = [...filtered].sort((a, b) =>
       a.name.localeCompare(b.name)
     );
@@ -50,7 +57,7 @@ function BankSlipUploadPage() {
     }
 
     setMessage("✅ Bank details and slip submitted successfully!");
-    // Submit logic goes here
+    // Submission logic here
   };
 
   return (

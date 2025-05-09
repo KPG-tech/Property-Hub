@@ -1,22 +1,23 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./payment.css";
 
 function Payment() {
+  const navigate = useNavigate();
+
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
 
-  // Card Number Validation (16-digit format XXXX XXXX XXXX XXXX)
   const validateCardNumber = (cardNumber) => {
     return /^\d{4} \d{4} \d{4} \d{4}$/.test(cardNumber);
   };
 
-  // Expiry Date Validation (MM/YY, ensures it's a valid future date)
   const validateExpiry = (expiry) => {
     const [month, year] = expiry.split("/");
-    const currentYear = new Date().getFullYear() % 100; // Last two digits of the current year
+    const currentYear = new Date().getFullYear() % 100;
     const currentMonth = new Date().getMonth() + 1;
 
     if (!month || !year || month < 1 || month > 12 || year.length !== 2) return false;
@@ -27,12 +28,10 @@ function Payment() {
     return expiryYear > currentYear || (expiryYear === currentYear && expiryMonth >= currentMonth);
   };
 
-  // CVV Validation (3-digit number)
   const validateCvv = (cvv) => {
     return /^\d{3}$/.test(cvv);
   };
 
-  // Handle Payment Submission
   const handlePayment = async () => {
     if (!cardNumber || !expiry || !cvv || !amount) {
       setMessage("⚠️ Please fill in all fields.");
@@ -61,12 +60,12 @@ function Payment() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "user123", // Replace with actual user ID
-          cardNumber: cardNumber.replace(/\s/g, ""), // Send without spaces
+          userId: "user123",
+          cardNumber: cardNumber.replace(/\s/g, ""),
           expiry,
           cvv,
           amount: paymentAmount,
-          token: "tok_visa", // Replace with real token in production
+          token: "tok_visa",
         }),
       });
 
@@ -75,36 +74,32 @@ function Payment() {
       if (data.success) {
         setMessage("✅ Payment Successful!");
       } else {
-        setMessage("❌ Payment Failed " );
+        setMessage("❌ Payment Failed");
       }
     } catch (error) {
-      setMessage("❌ Payment Error " );
+      setMessage("❌ Payment Error");
     }
   };
 
-  // Card Number Input Formatting (XXXX XXXX XXXX XXXX)
   const handleCardNumberChange = (e) => {
-    let value = e.target.value.replace(/\D/g, "").slice(0, 16); // Remove non-numeric and limit to 16 digits
-    value = value.replace(/(\d{4})(?=\d)/g, "$1 "); // Format with spaces
+    let value = e.target.value.replace(/\D/g, "").slice(0, 16);
+    value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
     setCardNumber(value);
   };
 
-  // Expiry Date Formatting (MM/YY)
   const handleExpiryChange = (e) => {
     let value = e.target.value.replace(/\D/g, "").slice(0, 4);
     if (value.length > 2) value = value.slice(0, 2) + "/" + value.slice(2);
     setExpiry(value);
   };
 
-  // CVV Input Handling (Only 3 digits)
   const handleCvvChange = (e) => {
     setCvv(e.target.value.replace(/\D/g, "").slice(0, 3));
   };
 
-  // Amount Input Handling (Only numbers and decimal points)
   const handleAmountChange = (e) => {
-    let value = e.target.value.replace(/[^0-9.]/g, ""); // Allow only numbers and decimal points
-    if ((value.match(/\./g) || []).length > 1) return; // Prevent multiple decimal points
+    let value = e.target.value.replace(/[^0-9.]/g, "");
+    if ((value.match(/\./g) || []).length > 1) return;
     setAmount(value);
   };
 
@@ -155,6 +150,12 @@ function Payment() {
 
         <button onClick={handlePayment}>Pay Now</button>
         {message && <p className="message">{message}</p>}
+
+        <p className="or-text">OR</p>
+
+        <button className="secondary-btn" onClick={() => navigate("/upload-slip")}>
+          Upload Bank Slip Instead
+        </button>
       </div>
     </div>
   );

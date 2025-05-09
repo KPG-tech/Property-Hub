@@ -1,123 +1,108 @@
-/* General Styles for the Payment Form */
+/* Container styling */
 .payment-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px;
-  max-width: 1000px;  /* Make the form wider */
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
 }
 
+/* Heading */
 .payment-heading {
-  font-size: 36px; /* Heading size */
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
   text-align: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #2c3e50;
 }
 
+/* Form layout */
 .payment-form {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  gap: 16px;
 }
 
+/* Labels */
+.payment-form label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #34495e;
+}
+
+/* Inputs */
+.payment-form input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+.payment-form input:focus {
+  border-color: #2980b9;
+  outline: none;
+}
+
+/* Expiry and CVV row */
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+/* Grouping input with label */
 .input-group {
-  margin-bottom: 25px; /* Space between input fields */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.input-group label {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.input-group input {
+/* Button styling */
+.payment-form button {
+  background-color: #2980b9;
+  color: #fff;
   padding: 14px;
   font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-.input-group input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-button {
-  width: 100%;
-  padding: 16px;
-  background-color: #1d13d8;
-  color: white;
   border: none;
   border-radius: 8px;
-  font-size: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #0404e8;
-  transform: scale(1.02);
+.payment-form button:hover {
+  background-color: #1f6391;
 }
 
-/* Message styles for feedback */
+/* Feedback message */
 .message {
-  margin-top: 20px;
-  font-size: 18px;
-  color: green;
+  margin-top: 12px;
+  font-weight: 500;
   text-align: center;
 }
 
-.message.error {
-  color: red;
+.message:empty {
+  display: none;
 }
 
-.message.success {
-  color: green;
+/* Responsive design */
+@media (max-width: 500px) {
+  .row {
+    flex-direction: column;
+  }
+}
+.secondary-btn {
+  margin-top: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.75rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Responsive Design for Smaller Screens */
-@media (max-width: 768px) {
-  .payment-container {
-    padding: 30px;
-    width: 90%;
-  }
-
-  .payment-heading {
-    font-size: 28px;
-  }
-
-  .payment-form {
-    padding: 20px;
-  }
-
-  .input-group input {
-    font-size: 14px;
-    padding: 12px;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 14px;
-  }
+.secondary-btn:hover {
+  background-color: #e0e0e0;
 }
