@@ -27,14 +27,13 @@ function BankSlipUploadPage() {
     const selectedBankID = e.target.value;
     setBankName(selectedBankID);
 
-    // Debug logs (optional)
-    console.log("Selected Bank ID:", selectedBankID);
-    console.log("Available Branches:", branches[selectedBankID]);
-
+    // Convert to string key to match JSON structure
     const filtered = branches[selectedBankID] || [];
-    const sortedBranches = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedBranches = [...filtered].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
     setFilteredBranches(sortedBranches);
-    setBankBranch("");
+    setBankBranch(""); // reset previous branch
   };
 
   const handleFormSubmit = (e) => {
@@ -51,7 +50,7 @@ function BankSlipUploadPage() {
     }
 
     setMessage("✅ Bank details and slip submitted successfully!");
-    // Send data to server here
+    // Submit to server logic goes here
   };
 
   return (
@@ -95,7 +94,7 @@ function BankSlipUploadPage() {
           >
             <option value="">-- Select a Branch --</option>
             {filteredBranches.map((branch) => (
-              <option key={branch.ID} value={branch.name}>
+              <option key={branch.code} value={branch.name}>
                 {branch.name}
               </option>
             ))}
