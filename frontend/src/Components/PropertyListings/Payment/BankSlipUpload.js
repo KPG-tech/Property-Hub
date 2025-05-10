@@ -101,7 +101,7 @@ function BankSlipUploadPage() {
           {bankSlip && <p>File Name: {bankSlip.name}</p>}
         </div>
 
-        <button type="submit">Submit</button>
+        <button className="payment" type="submit">Submit</button>
       </form>
 
       {message && <p className="message">{message}</p>}

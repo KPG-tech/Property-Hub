@@ -39,7 +39,7 @@ function PropertyDetails() {
   };
   
   const handleUpdate = (id) => {
-    navigate(`/updateproperty/${id}`);
+    navigate(`/seller/update-property/${id}`);
   };
 
   const generatePDF = () => {
@@ -68,7 +68,7 @@ function PropertyDetails() {
     <div>
       <p className='add_pro_topic'>Property Details</p>
       <div className='propty_continner_acton'>
-      <button type='button' className='serch_btn' onClick={()=>(window.location.href='/sellerAddProperty')}>Add Property</button>
+      <button type='button' className='serch_btn' onClick={()=>(window.location.href='/seller/add-property')}>Add Property</button>
         <div className='serch_con'>
           <input 
             type='text' 

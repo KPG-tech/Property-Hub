@@ -28,6 +28,7 @@ connection.once("open", () => {
 
 const authRouter = require("./routes/authRoutes.js");
 const pricepredictRouter = require("./routes/pricepredictRoutes.js");
+const bookingRouter = require("./routes/propertyRoutes.js");
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
 
 // Routes
@@ -37,12 +38,11 @@ const paymentRoutes = require("./routes/paymentRoutes");
 
 app.use("/auth", authRouter);
 app.use("/propertyfuture",pricepredictRouter);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files
 
-app.use('/api', require('./routes/SellerRoute'));
-app.use('/api', require('./routes/PropertySellerRoute'));
 
 app.use("/api/payment", paymentRoutes);
+
+app.use("/propertyBooking",bookingRouter);
 
 app.listen(PORT, () => {
   //ara port eka listn krnna
