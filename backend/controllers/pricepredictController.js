@@ -129,7 +129,11 @@ exports.predict = async (req, res) => {
 
         try {
             const jsonResponse = JSON.parse(text);
-            res.json(jsonResponse);
+            const finalResponse = {
+                property,
+                ...jsonResponse
+            };
+            res.json(finalResponse);
         } catch (parseError) {
             console.error("Error parsing Gemini response:", parseError);
             console.error("Gemini response text:", text);
